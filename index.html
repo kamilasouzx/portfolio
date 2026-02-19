@@ -138,15 +138,14 @@
 
         #cat {
             position: absolute; 
-            bottom: 10px; 
-            width: 50px; /* Tamanho da imagem do gatinho */
-            height: 50px;
-            left: 50%; 
-            transform: translateX(-50%);
-            transition: left 0.1s ease-out; 
-            user-select: none;
-            display: none;
-            object-fit: contain;
+    bottom: 10px; 
+    width: 50px; /* Tamanho do gatinho */
+    height: 50px;
+    left: 50%; 
+    transform: translateX(-50%);
+    transition: left 0.1s ease-out; 
+    user-select: none;
+    display: none;
         }
 
         .falling-icon { position: absolute; width: 32px; height: 32px; user-select: none; }
@@ -281,9 +280,9 @@
         gameContainer.addEventListener('mousemove', (e) => {
             if (!gameActive) return;
             const rect = gameContainer.getBoundingClientRect();
-            let x = e.clientX - rect.left - 25; // Ajustado para metade do tamanho da imagem (50px / 2)
+            let x = e.clientX - rect.left - 20;
             if (x < 0) x = 0;
-            if (x > rect.width - 50) x = rect.width - 50;
+            if (x > rect.width - 40) x = rect.width - 40;
             cat.style.left = x + 'px';
         });
 
