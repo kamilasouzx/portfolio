@@ -201,6 +201,22 @@
             <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI. Estou construindo minha carreira na área de tecnologia.</p>
         </header>
 
+        <section id="projects">
+            <h2>Projetos</h2>
+            <div class="grid-projects">
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--rosa);"></div>
+                    <h3>Em breve...</h3>
+                    <p>Espaço reservado para seus futuros projetos.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--azul);"></div>
+                    <h3>Portfólio 3D</h3>
+                    <p>Este site interativo criado com Three.js.</p>
+                </div>
+            </div>
+        </section>
+
         <section id="tools">
             <h2>Tecnologias & Ferramentas</h2>
             <div class="tags-wrapper">
@@ -251,7 +267,7 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- CÓDIGO DO THREE.JS (BOLINHAS ORIGINAIS) ---
+        // --- CÓDIGO DO THREE.JS (RESTAURADO E INTERATIVO) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -288,9 +304,18 @@
         scene.add(points);
         camera.position.z = 500;
 
+        // Mouse Interação
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
+        });
+
         function animate() {
             requestAnimationFrame(animate);
             points.rotation.y += 0.0004;
+            points.rotation.x += (mouseY * 0.0001);
+            points.rotation.y += (mouseX * 0.0001);
             renderer.render(scene, camera);
         }
         animate();
@@ -324,6 +349,7 @@
             overlay.style.display = 'none';
             cat.style.display = 'block';
             gameContainer.style.cursor = 'none';
+            if(spawnInterval) clearInterval(spawnInterval);
             spawnInterval = setInterval(createFallingObject, 1000);
         };
 
