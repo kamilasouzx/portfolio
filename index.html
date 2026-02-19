@@ -30,7 +30,12 @@
             overflow-x: hidden;
         }
 
-        #canvas-container { position: fixed; top: 0; left: 0; z-index: -1; }
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
 
         main {
             position: relative;
@@ -40,76 +45,82 @@
             padding: 50px 20px;
         }
 
-        header { text-align: left; padding: 40px 0; }
+        header {
+            text-align: left;
+            padding: 40px 0;
+        }
+
         h1 { font-size: 3rem; margin-bottom: 10px; color: #444; }
         h2 { border-bottom: 2px solid var(--lilas); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 25px;
             padding: 35px;
             margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
-        .tech-tags-container { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+        /* Tags com Logos e Cores Pastéis */
+        .tech-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
         .tag {
-            padding: 8px 20px; border-radius: 50px; font-size: 0.95rem; font-weight: 600;
-            color: #555; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .t-java { background: var(--rosa); } .t-spring { background: var(--lilas); }
-        .t-js { background: var(--azul); } .t-html { background: var(--verde); }
-        .t-sql { background: var(--salmao); } .t-tailwind { background: #FFF4AC; }
-
-        .contact-container { display: flex; gap: 15px; margin-top: 10px; }
-
-        /* Estilos do Jogo */
-        #game-container {
-            width: 100%;
-            height: 200px;
-            background: rgba(178, 213, 222, 0.2);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            border: 2px dashed var(--lilas);
-            cursor: pointer;
-        }
-
-        #mario {
-            width: 50px;
-            height: 50px;
-            position: absolute;
-            bottom: 10px;
-            left: 50px;
-            background-image: url('https://doc-08-34-docs.googleusercontent.com/docs/securesc/68c8msm67f5q6m67f5q6m67f5q6m67f5/mario.png'); /* Placeholder, usaremos um emoji/div se falhar */
-            font-size: 40px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: bottom 0.1s;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #444;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
         }
 
-        .coin {
-            position: absolute;
-            padding: 5px 15px;
-            background: white;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            white-space: nowrap;
+        .tag img {
+            height: 20px;
+            width: auto;
         }
 
-        .score { position: absolute; top: 10px; right: 20px; font-weight: bold; }
+        .tag:hover { transform: scale(1.05); }
 
-        .jump { animation: jump-anim 0.6s; }
-        @keyframes jump-anim {
-            0% { bottom: 10px; }
-            50% { bottom: 120px; }
-            100% { bottom: 10px; }
+        /* Cores das Tags */
+        .t-java { background: var(--rosa); }
+        .t-spring { background: var(--lilas); }
+        .t-js { background: var(--azul); }
+        .t-html { background: var(--verde); }
+        .t-sql { background: var(--salmao); }
+        .t-tailwind { background: #FFF4AC; }
+        .t-tools { background: #e9e9e9; }
+
+        .contact-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
         }
+
+        .grid-projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .project-img {
+            width: 100%;
+            height: 150px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        p { line-height: 1.6; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -119,38 +130,48 @@
     <main>
         <header>
             <h1>Kamila de Souza</h1>
-            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e técnica pelo SENAI. Foco em desenvolvimento contínuo e tecnologia.</p>
+            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI. Estou construindo minha carreira na área de tecnologia, com foco no desenvolvimento contínuo das minhas habilidades técnicas.</p>
         </header>
+
+        <section id="projects">
+            <h2>Projetos</h2>
+            <div class="grid-projects">
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--rosa);"></div>
+                    <h3>Em breve...</h3>
+                    <p>Espaço reservado para seus futuros projetos.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--azul);"></div>
+                    <h3>Portfólio 3D</h3>
+                    <p>Este site interativo criado com Three.js.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools">
+            <h2>Tecnologias & Ferramentas</h2>
+            <div class="tech-tags-container">
+                <span class="tag t-java"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"> Java</span>
+                <span class="tag t-spring"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg"> Spring</span>
+                <span class="tag t-js"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"> JavaScript</span>
+                <span class="tag t-html"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"> HTML5</span>
+                <span class="tag t-sql"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"> PostgreSQL</span>
+                <span class="tag t-tailwind"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"> Tailwind</span>
+                <span class="tag t-tools"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"> Git</span>
+                <span class="tag t-tools"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"> VS Code</span>
+            </div>
+        </section>
 
         <section id="contact">
             <h2>Entre em contato</h2>
             <div class="contact-container">
                 <a href="https://www.linkedin.com/in/kamila-de-souza" target="_blank">
-                    <img src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&style=for-the-badge" height="30">
+                    <img src="https://img.shields.io/static/v1?message=LinkedIn&logo=linkedin&label=&color=0077B5&logoColor=white&style=for-the-badge" height="30" alt="LinkedIn" />
                 </a>
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kskamila39@gmail.com" target="_blank">
-                    <img src="https://img.shields.io/static/v1?message=Gmail&logo=gmail&label=&color=D14836&logoColor=white&style=for-the-badge" height="30">
+                    <img src="https://img.shields.io/static/v1?message=Gmail&logo=gmail&label=&color=D14836&logoColor=white&style=for-the-badge" height="30" alt="Gmail" />
                 </a>
-            </div>
-        </section>
-
-        <section id="game-section">
-            <h2>Tech Adventure Game</h2>
-            <p>Clique no quadro para o Mario pular e coletar as tecnologias!</p>
-            <div id="game-container">
-                <div class="score">Techs Coletadas: <span id="score-val">0</span></div>
-                <div id="mario">🏃‍♂️</div>
-            </div>
-        </section>
-
-        <section id="tools">
-            <h2>Tecnologias Coletadas</h2>
-            <div class="tech-tags-container" id="collected-tags">
-                <span class="tag t-java">Java</span>
-                <span class="tag t-spring">Spring Boot</span>
-                <span class="tag t-js">JavaScript</span>
-                <span class="tag t-html">HTML/CSS</span>
-                <span class="tag t-sql">SQL</span>
             </div>
         </section>
     </main>
@@ -158,11 +179,11 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- CÓDIGO DO FUNDO 3D (BOLINHAS) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
         const createCircleTexture = () => {
@@ -175,7 +196,7 @@
         };
 
         const geometry = new THREE.BufferGeometry();
-        const count = 1500;
+        const count = 1800;
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
         const palette = [0xEEC1D8, 0xC6B3FA, 0xB2D5DE, 0xB2DECD, 0xFFF4AC];
@@ -190,73 +211,44 @@
 
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const points = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 8, map: createCircleTexture(), vertexColors: true, transparent: true, opacity: 0.7, alphaTest: 0.5 }));
+
+        const material = new THREE.PointsMaterial({
+            size: 8, map: createCircleTexture(), vertexColors: true,
+            transparent: true, opacity: 0.6, alphaTest: 0.5
+        });
+
+        const points = new THREE.Points(geometry, material);
         scene.add(points);
         camera.position.z = 500;
 
         let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.05;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.05;
+        document.addEventListener('mousemove', (event) => {
+            // Sensibilidade reduzida (0.05 -> 0.02)
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.02;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.02;
         });
 
         function animate() {
             requestAnimationFrame(animate);
-            points.rotation.y += 0.001;
-            points.rotation.x += (mouseY * 0.0005);
-            points.rotation.y += (mouseX * 0.0005);
+            
+            // VELOCIDADE REDUZIDA:
+            // Rotação automática (0.001 -> 0.0004)
+            points.rotation.y += 0.0004; 
+            
+            // Reação ao mouse (0.0005 -> 0.0002)
+            points.rotation.x += (mouseY * 0.0002);
+            points.rotation.y += (mouseX * 0.0002);
+
             renderer.render(scene, camera);
         }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
         animate();
-
-        // --- CÓDIGO DO JOGUINHO ---
-        const mario = document.getElementById('mario');
-        const gameContainer = document.getElementById('game-container');
-        const scoreVal = document.getElementById('score-val');
-        let score = 0;
-        const techs = ['Java', 'Spring', 'SQL', 'JS', 'React', 'HTML', 'CSS', 'Git'];
-
-        const jump = () => {
-            if (!mario.classList.contains('jump')) {
-                mario.classList.add('jump');
-                setTimeout(() => mario.classList.remove('jump'), 600);
-            }
-        };
-
-        gameContainer.addEventListener('click', jump);
-        window.addEventListener('keydown', (e) => { if(e.code === 'Space') jump(); });
-
-        setInterval(() => {
-            const coin = document.createElement('div');
-            coin.classList.add('coin');
-            coin.innerText = techs[Math.floor(Math.random() * techs.length)];
-            coin.style.right = '-100px';
-            coin.style.top = Math.random() * 100 + 20 + 'px';
-            gameContainer.appendChild(coin);
-
-            let pos = -100;
-            const moveCoin = setInterval(() => {
-                pos += 5;
-                coin.style.right = pos + 'px';
-
-                // Colisão simples
-                const mRect = mario.getBoundingClientRect();
-                const cRect = coin.getBoundingClientRect();
-
-                if (cRect.left < mRect.right && cRect.right > mRect.left && cRect.top < mRect.bottom && cRect.bottom > mRect.top) {
-                    score++;
-                    scoreVal.innerText = score;
-                    coin.remove();
-                    clearInterval(moveCoin);
-                }
-
-                if (pos > window.innerWidth) {
-                    coin.remove();
-                    clearInterval(moveCoin);
-                }
-            }, 20);
-        }, 2000);
-
     </script>
 </body>
 </html>
