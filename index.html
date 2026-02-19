@@ -92,7 +92,10 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
-        .tag-pill img { height: 24px; width: auto; }
+        .tag-pill img {
+            height: 24px;
+            width: auto;
+        }
 
         .bg-rosa { background-color: var(--rosa); }
         .bg-lilas { background-color: var(--lilas); }
@@ -114,68 +117,43 @@
             margin-bottom: 15px;
         }
 
+        p { line-height: 1.6; font-size: 1.1rem; }
+
         /* --- ESTILOS DO JOGO --- */
-        #game-area {
+        #game-container {
             position: relative;
             width: 100%;
-            height: 160px;
-            background: rgba(255, 255, 255, 0.1);
+            height: 300px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 15px;
             overflow: hidden;
             border: 2px dashed var(--lilas);
-            cursor: pointer;
+            cursor: none;
         }
 
-        #start-screen {
+        #cat {
             position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(244, 244, 244, 0.85);
-            z-index: 10;
-            font-weight: bold;
-            color: var(--lilas);
-            text-align: center;
-            padding: 20px;
-        }
-
-        #game-cat {
-            position: absolute;
-            bottom: 0;
-            left: 50px;
+            bottom: 10px;
             font-size: 40px;
+            transition: left 0.1s ease-out;
             user-select: none;
-            z-index: 2;
         }
 
-        #game-obstacle {
+        .falling-icon {
             position: absolute;
-            bottom: 0;
-            right: -50px;
-            font-size: 30px;
+            width: 30px;
+            height: 30px;
             user-select: none;
         }
 
-        #game-score {
+        #score {
             position: absolute;
             top: 10px;
-            left: 15px;
+            right: 20px;
             font-weight: bold;
-            color: var(--texto);
+            color: var(--lilas);
+            font-size: 1.2rem;
         }
-
-        .jumping {
-            animation: jump-anim 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
-        }
-
-        @keyframes jump-anim {
-            0% { bottom: 0; }
-            50% { bottom: 100px; }
-            100% { bottom: 0; }
-        }
-
-        p { line-height: 1.6; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -222,15 +200,13 @@
         </section>
 
         <section id="mini-game">
-            <h2>Área de Lazer: Cat Jump</h2>
+            <h2>Área de Lazer: Catch the Tech!</h2>
             <div class="glass-card">
-                <div id="game-area">
-                    <div id="start-screen">CLIQUE PARA INICIAR</div>
-                    <div id="game-score">Score: 0</div>
-                    <div id="game-cat">🐱</div>
-                    <div id="game-obstacle">👾</div>
+                <p style="font-size: 0.9rem; margin-top: 0;">Mova o mouse dentro do quadro para o gatinho pegar as tecnologias!</p>
+                <div id="game-container">
+                    <div id="score">Pontos: 0</div>
+                    <div id="cat">🐱</div>
                 </div>
-                <p style="font-size: 0.8rem; text-align: center; margin-top: 10px;">Pule os bugs com <b>Espaço</b> ou <b>Clique</b>!</p>
             </div>
         </section>
 
@@ -250,7 +226,7 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- BACKGROUND THREE.JS ---
+        // --- CÓDIGO DO THREE.JS (BOLINHAS) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -294,9 +270,9 @@
         camera.position.z = 500;
 
         let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.02;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.02;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.02;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.02;
         });
 
         function animate() {
@@ -315,85 +291,69 @@
 
         animate();
 
-        // --- LÓGICA DO JOGO ---
-        const area = document.getElementById('game-area');
-        const cat = document.getElementById('game-cat');
-        const obstacle = document.getElementById('game-obstacle');
-        const scoreDisp = document.getElementById('game-score');
-        const startScreen = document.getElementById('start-screen');
-        
+        // --- LÓGICA DO JOGUINHO ---
+        const gameContainer = document.getElementById('game-container');
+        const cat = document.getElementById('cat');
+        const scoreElement = document.getElementById('score');
         let score = 0;
-        let isPlaying = false;
-        let canJump = true;
-        const obsList = ['👾', '🐛', '❌', '⚠️'];
 
-        area.addEventListener('click', () => {
-            if (!isPlaying) startGame();
-            else jump();
+        const techIcons = [
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'
+        ];
+
+        // Mover o gato com o mouse dentro do container
+        gameContainer.addEventListener('mousemove', (e) => {
+            const rect = gameContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left - 20;
+            if (x < 0) x = 0;
+            if (x > rect.width - 40) x = rect.width - 40;
+            cat.style.left = x + 'px';
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                if (window.scrollY > area.offsetTop - 500) { // Só pula se estiver perto do jogo
-                    e.preventDefault();
-                    if (!isPlaying) startGame();
-                    else jump();
-                }
-            }
-        });
+        function createIcon() {
+            const icon = document.createElement('img');
+            const randomTech = techIcons[Math.floor(Math.random() * techIcons.length)];
+            icon.src = randomTech;
+            icon.classList.add('falling-icon');
+            icon.style.left = Math.random() * (gameContainer.offsetWidth - 30) + 'px';
+            icon.style.top = '-30px';
+            gameContainer.appendChild(icon);
 
-        function jump() {
-            if (canJump && isPlaying) {
-                canJump = false;
-                cat.classList.add('jumping');
-                setTimeout(() => {
-                    cat.classList.remove('jumping');
-                    canJump = true;
-                }, 600);
-            }
-        }
+            let topPos = -30;
+            const fallInterval = setInterval(() => {
+                topPos += 3;
+                icon.style.top = topPos + 'px';
 
-        function startGame() {
-            isPlaying = true;
-            score = 0;
-            scoreDisp.innerText = "Score: 0";
-            startScreen.style.display = 'none';
-            obstacle.style.right = '-50px';
-            runGame();
-        }
+                // Checar colisão com o gato
+                const catRect = cat.getBoundingClientRect();
+                const iconRect = icon.getBoundingClientRect();
 
-        function runGame() {
-            let pos = -50;
-            const gameLoop = setInterval(() => {
-                if (!isPlaying) {
-                    clearInterval(gameLoop);
-                    return;
-                }
-
-                pos += 6 + (score * 0.2);
-                if (pos > area.offsetWidth + 50) {
-                    pos = -50;
+                if (
+                    iconRect.bottom >= catRect.top &&
+                    iconRect.right >= catRect.left &&
+                    iconRect.left <= catRect.right
+                ) {
                     score++;
-                    scoreDisp.innerText = "Score: " + score;
-                    obstacle.innerText = obsList[Math.floor(Math.random() * obsList.length)];
+                    scoreElement.innerText = `Pontos: ${score}`;
+                    icon.remove();
+                    clearInterval(fallInterval);
                 }
-                obstacle.style.right = pos + "px";
 
-                const cRect = cat.getBoundingClientRect();
-                const oRect = obstacle.getBoundingClientRect();
-
-                if (oRect.left < cRect.right && oRect.right > cRect.left && cRect.bottom > oRect.top + 10) {
-                    gameOver();
-                    clearInterval(gameLoop);
+                // Remover se sair da tela
+                if (topPos > gameContainer.offsetHeight) {
+                    icon.remove();
+                    clearInterval(fallInterval);
                 }
             }, 20);
         }
 
-        function gameOver() {
-            isPlaying = false;
-            startScreen.innerHTML = `GAME OVER: ${score}<br>CLIQUE PARA RECOMEÇAR`;
-            startScreen.style.display = 'flex';
-        }
+        // Criar um novo ícone a cada 1.5 segundos
+        setInterval(createIcon, 1500);
+
     </script>
 </body>
 </html>
