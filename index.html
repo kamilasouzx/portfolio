@@ -114,18 +114,30 @@
             margin-bottom: 15px;
         }
 
-        /* --- ESTILOS DO JOGO CAT JUMP --- */
+        /* --- ESTILOS DO JOGO --- */
         #game-area {
             position: relative;
             width: 100%;
-            height: 180px;
-            background: rgba(255, 255, 255, 0.2);
+            height: 160px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             overflow: hidden;
-            border-bottom: 3px solid var(--lilas);
+            border: 2px dashed var(--lilas);
             cursor: pointer;
+        }
+
+        #start-screen {
+            position: absolute;
+            inset: 0;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: center;
+            background: rgba(244, 244, 244, 0.85);
+            z-index: 10;
+            font-weight: bold;
+            color: var(--lilas);
+            text-align: center;
+            padding: 20px;
         }
 
         #game-cat {
@@ -148,16 +160,16 @@
         #game-score {
             position: absolute;
             top: 10px;
-            right: 20px;
+            left: 15px;
             font-weight: bold;
-            color: var(--lilas);
+            color: var(--texto);
         }
 
-        .jump-animation {
-            animation: jump 0.5s ease-out;
+        .jumping {
+            animation: jump-anim 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
 
-        @keyframes jump {
+        @keyframes jump-anim {
             0% { bottom: 0; }
             50% { bottom: 100px; }
             100% { bottom: 0; }
@@ -212,12 +224,13 @@
         <section id="mini-game">
             <h2>Área de Lazer: Cat Jump</h2>
             <div class="glass-card">
-                <p style="font-size: 0.9rem; margin-top: 0;">Ajude o gatinho a pular os bugs! Use a tecla <b>Espaço</b> ou <b>clique</b> no quadro.</p>
                 <div id="game-area">
+                    <div id="start-screen">CLIQUE PARA INICIAR</div>
                     <div id="game-score">Score: 0</div>
                     <div id="game-cat">🐱</div>
                     <div id="game-obstacle">👾</div>
                 </div>
+                <p style="font-size: 0.8rem; text-align: center; margin-top: 10px;">Pule os bugs com <b>Espaço</b> ou <b>Clique</b>!</p>
             </div>
         </section>
 
@@ -237,7 +250,7 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- CÓDIGO DO THREE.JS (BOLINHAS) ---
+        // --- BACKGROUND THREE.JS ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -281,9 +294,9 @@
         camera.position.z = 500;
 
         let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.02;
-            mouseY = (event.clientY - window.innerHeight / 2) * 0.02;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.02;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.02;
         });
 
         function animate() {
@@ -302,84 +315,85 @@
 
         animate();
 
-        // --- LÓGICA DO JOGO CAT JUMP ---
-        const gameArea = document.getElementById('game-area');
+        // --- LÓGICA DO JOGO ---
+        const area = document.getElementById('game-area');
         const cat = document.getElementById('game-cat');
         const obstacle = document.getElementById('game-obstacle');
-        const scoreElement = document.getElementById('game-score');
+        const scoreDisp = document.getElementById('game-score');
+        const startScreen = document.getElementById('start-screen');
         
         let score = 0;
-        let isJumping = false;
-        let gameActive = true;
+        let isPlaying = false;
+        let canJump = true;
+        const obsList = ['👾', '🐛', '❌', '⚠️'];
 
-        const obstacles = ['👾', '🐛', '❌', '⚠️'];
-
-        function jump() {
-            if (!gameActive) {
-                resetGame();
-                return;
-            }
-            if (isJumping) return;
-            
-            isJumping = true;
-            cat.classList.add('jump-animation');
-            
-            setTimeout(() => {
-                cat.classList.remove('jump-animation');
-                isJumping = false;
-            }, 500);
-        }
+        area.addEventListener('click', () => {
+            if (!isPlaying) startGame();
+            else jump();
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space') {
-                e.preventDefault();
-                jump();
+                if (window.scrollY > area.offsetTop - 500) { // Só pula se estiver perto do jogo
+                    e.preventDefault();
+                    if (!isPlaying) startGame();
+                    else jump();
+                }
             }
         });
 
-        gameArea.addEventListener('click', jump);
+        function jump() {
+            if (canJump && isPlaying) {
+                canJump = false;
+                cat.classList.add('jumping');
+                setTimeout(() => {
+                    cat.classList.remove('jumping');
+                    canJump = true;
+                }, 600);
+            }
+        }
 
-        function resetGame() {
+        function startGame() {
+            isPlaying = true;
             score = 0;
-            gameActive = true;
-            scoreElement.innerText = 'Score: 0';
+            scoreDisp.innerText = "Score: 0";
+            startScreen.style.display = 'none';
             obstacle.style.right = '-50px';
-            requestAnimationFrame(update);
+            runGame();
         }
 
-        function update() {
-            if (!gameActive) return;
+        function runGame() {
+            let pos = -50;
+            const gameLoop = setInterval(() => {
+                if (!isPlaying) {
+                    clearInterval(gameLoop);
+                    return;
+                }
 
-            let obstaclePos = parseInt(window.getComputedStyle(obstacle).getPropertyValue('right'));
-            let obstacleSpeed = 5 + Math.floor(score / 5); // Aumenta a velocidade
+                pos += 6 + (score * 0.2);
+                if (pos > area.offsetWidth + 50) {
+                    pos = -50;
+                    score++;
+                    scoreDisp.innerText = "Score: " + score;
+                    obstacle.innerText = obsList[Math.floor(Math.random() * obsList.length)];
+                }
+                obstacle.style.right = pos + "px";
 
-            if (obstaclePos > gameArea.offsetWidth) {
-                obstaclePos = -50;
-                score++;
-                scoreElement.innerText = `Score: ${score}`;
-                obstacle.innerText = obstacles[Math.floor(Math.random() * obstacles.length)];
-            }
+                const cRect = cat.getBoundingClientRect();
+                const oRect = obstacle.getBoundingClientRect();
 
-            obstacle.style.right = (obstaclePos + obstacleSpeed) + 'px';
-
-            // Colisão
-            let catRect = cat.getBoundingClientRect();
-            let obsRect = obstacle.getBoundingClientRect();
-
-            if (
-                obsRect.left < catRect.right &&
-                obsRect.right > catRect.left &&
-                catRect.bottom > obsRect.top
-            ) {
-                gameActive = false;
-                alert(`Game Over! Seu score foi: ${score}`);
-            }
-
-            if (gameActive) requestAnimationFrame(update);
+                if (oRect.left < cRect.right && oRect.right > cRect.left && cRect.bottom > oRect.top + 10) {
+                    gameOver();
+                    clearInterval(gameLoop);
+                }
+            }, 20);
         }
 
-        update();
-
+        function gameOver() {
+            isPlaying = false;
+            startScreen.innerHTML = `GAME OVER: ${score}<br>CLIQUE PARA RECOMEÇAR`;
+            startScreen.style.display = 'flex';
+        }
     </script>
 </body>
 </html>
