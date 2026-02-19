@@ -13,14 +13,14 @@
     </script>
     <style>
         :root {
-            --bg-base: #f4f4f4;
+            --bg-base: #0a0a0a;
             --rosa: #EEC1D8;
             --lilas: #C6B3FA;
             --salmao: #F1C6A4;
             --azul: #B2D5DE;
             --verde: #B2DECD;
             --amarelo: #FFF4AC;
-            --texto: #444;
+            --texto: #f4f4f4;
         }
 
         body {
@@ -51,21 +51,20 @@
             padding: 40px 0;
         }
 
-        h1 { font-size: 3rem; margin-bottom: 10px; color: #444; }
+        h1 { font-size: 3rem; margin-bottom: 10px; color: #fff; }
         h2 { border-bottom: 2px solid var(--lilas); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.45);
+            background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 25px;
             padding: 35px;
             margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
-        /* Estilo Unificado para Tags de Tecnologia e Contato */
         .tags-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -81,16 +80,16 @@
             border-radius: 50px;
             font-size: 0.95rem;
             font-weight: 600;
-            color: #444;
+            color: #222; /* Texto escuro para contrastar com as pílulas pastéis */
             text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: transform 0.2s, box-shadow 0.2s;
             border: 1px solid rgba(255,255,255,0.2);
         }
 
         .tag-pill:hover { 
             transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4);
         }
 
         .tag-pill img {
@@ -98,7 +97,7 @@
             width: auto;
         }
 
-        /* Cores Específicas */
+        /* Cores das Tags */
         .bg-rosa { background-color: var(--rosa); }
         .bg-lilas { background-color: var(--lilas); }
         .bg-azul { background-color: var(--azul); }
@@ -172,9 +171,9 @@
                 <a href="https://www.linkedin.com/in/kamila-de-souza" target="_blank" class="tag-pill bg-azul">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"> LinkedIn
                 </a>
-               <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kskamila39@gmail.com" target="_blank" class="tag-pill bg-amarelo">
-    <img src="https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Gmail-Light.svg" style="filter: contrast(1.5);"> Gmail
-</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kskamila39@gmail.com" target="_blank" class="tag-pill bg-salmao">
+                    <img src="https://www.vectorlogo.zone/logos/gmail/gmail-icon.svg"> Gmail
+                </a>
             </div>
         </section>
     </main>
@@ -232,7 +231,7 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            points.rotation.y += 0.0004; 
+            points.rotation.y += 0.0004; // Velocidade reduzida
             points.rotation.x += (mouseY * 0.0002);
             points.rotation.y += (mouseX * 0.0002);
             renderer.render(scene, camera);
