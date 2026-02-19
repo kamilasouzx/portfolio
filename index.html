@@ -137,15 +137,11 @@
         .game-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(198, 179, 250, 0.6); }
 
         #cat {
-            position: absolute; 
-    bottom: 10px; 
-    width: 50px; /* Tamanho do gatinho */
-    height: 50px;
-    left: 50%; 
-    transform: translateX(-50%);
-    transition: left 0.1s ease-out; 
-    user-select: none;
-    display: none;
+            position: absolute; bottom: 10px; 
+            width: 50px; height: 50px; /* Ajuste para a imagem */
+            left: 50%; transform: translateX(-50%);
+            transition: left 0.1s ease-out; user-select: none;
+            display: none; 
         }
 
         .falling-icon { position: absolute; width: 32px; height: 32px; user-select: none; }
@@ -166,6 +162,24 @@
             <h1>Kamila de Souza</h1>
             <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI.</p>
         </header>
+
+        <section id="projects">
+            <h2>Projetos</h2>
+            <div class="glass-card">
+                <div class="grid-projects">
+                    <div>
+                        <div class="project-img" style="background-color: var(--rosa);"></div>
+                        <h3>Em breve...</h3>
+                        <p>Espaço reservado para seus futuros projetos.</p>
+                    </div>
+                    <div>
+                        <div class="project-img" style="background-color: var(--azul);"></div>
+                        <h3>Portfólio 3D</h3>
+                        <p>Este site interativo criado com Three.js.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section id="tools">
             <h2>Tecnologias & Ferramentas</h2>
@@ -190,7 +204,7 @@
                         <button class="game-btn" id="start-btn">Iniciar Jogo</button>
                     </div>
 
-                    <img src="https://cdn-icons-png.flaticon.com/512/763/763775.png" id="cat" alt="Gatinho">
+                    <img src="https://cdn-icons-png.flaticon.com/512/763/763775.png" id="cat" alt="Kitty">
                 </div>
             </div>
         </section>
@@ -200,7 +214,6 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- CÓDIGO DO THREE.JS (MANTIDO) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -240,7 +253,7 @@
         }
         animate();
 
-        // --- LÓGICA DO JOGUINHO (REFEITA) ---
+        // --- LÓGICA DO JOGUINHO ---
         const gameContainer = document.getElementById('game-container');
         const cat = document.getElementById('cat');
         const scoreElement = document.getElementById('score');
@@ -280,9 +293,9 @@
         gameContainer.addEventListener('mousemove', (e) => {
             if (!gameActive) return;
             const rect = gameContainer.getBoundingClientRect();
-            let x = e.clientX - rect.left - 20;
+            let x = e.clientX - rect.left - 25;
             if (x < 0) x = 0;
-            if (x > rect.width - 40) x = rect.width - 40;
+            if (x > rect.width - 50) x = rect.width - 50;
             cat.style.left = x + 'px';
         });
 
