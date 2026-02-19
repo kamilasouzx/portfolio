@@ -3,557 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Tech • @vidadesocialmedia</title>
+    <title>Meu Portfólio Tech</title>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+          }
+        }
+    </script>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
+        :root {
+            --bg-base: #f4f4f4;
+            --rosa: #EEC1D8;
+            --lilas: #C6B3FA;
+            --salmao: #F1C6A4;
+            --azul: #B2D5DE;
+            --verde: #B2DECD;
+            --texto: #444;
         }
 
-        /* Loading */
-        #loading {
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--texto);
+            overflow-x: hidden;
+        }
+
+        #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0a0a14;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 1s;
+            z-index: -1; /* Fica atrás de tudo */
         }
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border-top-color: #C6B3FA;
-            animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Info topo */
-        #info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
-            background: rgba(0,0,0,0.5);
-            padding: 8px 20px;
-            border-radius: 30px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-            font-size: 14px;
-            letter-spacing: 2px;
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 50px 20px;
         }
-        #info span:nth-child(1) { color: #EEC1D8; }
-        #info span:nth-child(2) { color: #B2D5DE; }
 
-        /* Menu */
-        #menu {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 20;
-            display: flex;
-            gap: 10px;
+        header {
+            text-align: center;
+            padding: 100px 0;
         }
-        .menu-item {
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
+
+        h1 { font-size: 3rem; margin-bottom: 10px; color: #555; }
+
+        /* Estilo Glassmorphism para os Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .menu-item:hover {
-            background: #C6B3FA;
-            color: black;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(198, 179, 250, 0.4);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
         }
 
-        /* Painel principal */
-        .panel {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 30;
-            width: 90%;
-            max-width: 1200px;
-            background: rgba(10, 10, 20, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            transition: transform 0.5s;
-        }
-        .panel.hidden {
-            transform: translateX(-50%) translateY(120%);
-        }
-
-        .projects-section, .tech-section {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        h2 {
-            margin: 0 0 20px 0;
-            font-size: 22px;
-            background: linear-gradient(90deg, #EEC1D8, #C6B3FA, #B2D5DE);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-
-        /* Grid de projetos */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        .project-card {
-            background: rgba(30, 30, 40, 0.6);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .project-card:hover {
+        .glass-card:hover {
             transform: translateY(-5px);
-            border-color: #C6B3FA;
-            box-shadow: 0 10px 20px rgba(198, 179, 250, 0.3);
-        }
-        .project-image {
-            height: 100px;
-            background: linear-gradient(45deg, #1a1a2e, #2a2a3a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-        }
-        .project-info {
-            padding: 12px;
-        }
-        .project-title {
-            font-weight: bold;
-            margin-bottom: 4px;
-            color: #FFF4AC;
-            font-size: 14px;
-        }
-        .project-desc {
-            font-size: 11px;
-            color: rgba(255,255,255,0.7);
-        }
-        .project-tech {
-            font-size: 9px;
-            margin-top: 6px;
-            color: #B2DECD;
         }
 
-        /* Tecnologias */
-        .tech-grid {
+        .grid-projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .project-img {
+            width: 100%;
+            height: 200px;
+            background: var(--azul);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .tech-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-        }
-        .tech-item {
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s;
-        }
-        .tech-item:hover {
-            border-color: #B2DECD;
-            transform: scale(1.1) rotate(5deg);
-            background: rgba(178, 222, 205, 0.1);
-        }
-        .tech-icon {
-            font-size: 28px;
-        }
-        .tech-name {
-            font-size: 10px;
-            margin-top: 4px;
-            color: #F1C6A4;
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        /* Botão toggle */
-        .toggle-panel {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 40;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            border-radius: 30px;
-            padding: 8px 20px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-        .toggle-panel:hover {
-            background: #B2D5DE;
-            color: black;
+        .tag {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-        ::-webkit-scrollbar-thumb { background: #C6B3FA; border-radius: 5px; }
+        /* Cores dinâmicas para as tags baseadas na sua paleta */
+        .tag-html { background: var(--rosa); }
+        .tag-js { background: var(--lilas); }
+        .tag-three { background: var(--verde); }
     </style>
 </head>
 <body>
-    <div id="loading"><div class="loader"></div></div>
-    
-    <div id="info">
-        <span>✦</span> @vidadesocialmedia <span>✦</span>
-    </div>
-    
-    <div id="menu">
-        <div class="menu-item" onclick="filtrarProjetos('all')">Todos</div>
-        <div class="menu-item" onclick="filtrarProjetos('web')">Web</div>
-        <div class="menu-item" onclick="filtrarProjetos('3d')">3D</div>
-        <div class="menu-item" onclick="filtrarProjetos('app')">Apps</div>
-    </div>
-    
-    <div class="panel" id="mainPanel">
-        <div class="projects-section">
-            <h2>📁 PROJETOS</h2>
-            <div class="project-grid" id="projectGrid"></div>
-        </div>
-        
-        <div class="tech-section">
-            <h2>⚙️ TECNOLOGIAS</h2>
-            <div class="tech-grid" id="techGrid"></div>
-        </div>
-    </div>
-    
-    <div class="toggle-panel" id="togglePanel">▲ FECHAR ▲</div>
 
-    <!-- Import Three.js -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
-            }
-        }
-    </script>
+    <div id="canvas-container"></div>
+
+    <main>
+        <header>
+            <h1>Seu Nome Aqui</h1>
+            <p>Desenvolvedor Frontend & Creative Technologist</p>
+        </header>
+
+        <section id="projects">
+            <h2>Projetos</h2>
+            <div class="grid-projects">
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--salmao);"></div>
+                    <h3>Projeto Alpha</h3>
+                    <p>Uma descrição breve e elegante do que você construiu e qual problema resolveu.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--lilas);"></div>
+                    <h3>Projeto Beta</h3>
+                    <p>Interface moderna utilizando animações fluidas e design minimalista.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools">
+            <div class="glass-card">
+                <h2>Tecnologias & Ferramentas</h2>
+                <div class="tech-tags">
+                    <span class="tag tag-html">HTML5 / CSS3</span>
+                    <span class="tag tag-js">JavaScript ES6</span>
+                    <span class="tag tag-three">Three.js</span>
+                    <span class="tag" style="background: var(--azul);">React</span>
+                    <span class="tag" style="background: var(--amarelo);">Git & GitHub</span>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <script type="module">
         import * as THREE from 'three';
 
-        // --- DADOS ---
-        const cores = ['#EEC1D8', '#C6B3FA', '#F1C6A4', '#B2D5DE', '#FFF4AC', '#B2DECD'];
-        
-        const projetos = [
-            { titulo: 'E-commerce', desc: 'Loja virtual completa', tech: 'React • Node • MongoDB', cor: cores[0], icone: '🛒', categoria: 'web' },
-            { titulo: '3D Portfolio', desc: 'Site interativo em 3D', tech: 'Three.js • HTML • CSS', cor: cores[1], icone: '🧊', categoria: '3d' },
-            { titulo: 'Weather App', desc: 'Previsão do tempo', tech: 'JS • API • CSS', cor: cores[2], icone: '☀️', categoria: 'app' },
-            { titulo: 'Game Dash', desc: 'Dashboard de jogos', tech: 'Vue • D3 • Firebase', cor: cores[3], icone: '🎮', categoria: 'web' },
-            { titulo: 'AR Experience', desc: 'Realidade aumentada', tech: 'AR.js • A-Frame', cor: cores[4], icone: '🥽', categoria: '3d' },
-            { titulo: 'Task Manager', desc: 'Gerenciador de tarefas', tech: 'React • Redux', cor: cores[5], icone: '✅', categoria: 'app' }
-        ];
-
-        const tecnologias = [
-            { nome: 'HTML5', icone: '🌐', cor: cores[0] },
-            { nome: 'CSS3', icone: '🎨', cor: cores[3] },
-            { nome: 'JS', icone: '⚡', cor: cores[4] },
-            { nome: 'React', icone: '⚛️', cor: cores[1] },
-            { nome: 'Three', icone: '🧊', cor: cores[2] },
-            { nome: 'Node', icone: '🚀', cor: cores[5] },
-            { nome: 'Git', icone: '📦', cor: cores[0] },
-            { nome: 'Figma', icone: '🎯', cor: cores[3] }
-        ];
-
-        // --- POPULAR PAINEL ---
-        const projectGrid = document.getElementById('projectGrid');
-        projetos.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'project-card';
-            card.dataset.categoria = p.categoria;
-            card.innerHTML = `
-                <div class="project-image" style="background: linear-gradient(135deg, ${p.cor}20, #1a1a2e);">${p.icone}</div>
-                <div class="project-info">
-                    <div class="project-title">${p.titulo}</div>
-                    <div class="project-desc">${p.desc}</div>
-                    <div class="project-tech">${p.tech}</div>
-                </div>
-            `;
-            projectGrid.appendChild(card);
-        });
-
-        const techGrid = document.getElementById('techGrid');
-        tecnologias.forEach(t => {
-            const item = document.createElement('div');
-            item.className = 'tech-item';
-            item.style.borderColor = t.cor;
-            item.innerHTML = `
-                <div class="tech-icon">${t.icone}</div>
-                <div class="tech-name">${t.nome}</div>
-            `;
-            techGrid.appendChild(item);
-        });
-
-        // --- FILTRO ---
-        window.filtrarProjetos = (categoria) => {
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.style.display = categoria === 'all' || card.dataset.categoria === categoria ? 'block' : 'none';
-            });
-        };
-
-        // --- TOGGLE PAINEL ---
-        const panel = document.getElementById('mainPanel');
-        const toggleBtn = document.getElementById('togglePanel');
-        toggleBtn.addEventListener('click', () => {
-            panel.classList.toggle('hidden');
-            toggleBtn.innerHTML = panel.classList.contains('hidden') ? '▼ ABRIR ▼' : '▲ FECHAR ▲';
-        });
-
-        // --- THREE.JS SETUP ---
+        // Configuração Básica
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0a14);
-
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(5, 2, 8);
-        camera.lookAt(0, 0, 0);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.setPixelRatio(window.devicePixelRatio);
-        document.body.appendChild(renderer.domElement);
-
-        // --- LUZES ---
-        const ambientLight = new THREE.AmbientLight(0x404060);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-        dirLight.position.set(2, 5, 3);
-        dirLight.castShadow = true;
-        scene.add(dirLight);
-
-        // Luzes coloridas que vão se mover
-        const pointLights = [];
-        cores.forEach((cor, i) => {
-            const light = new THREE.PointLight(cor, 0.8, 10);
-            light.position.set(Math.sin(i * 2) * 3, 1, Math.cos(i * 2) * 3);
-            scene.add(light);
-            pointLights.push(light);
-            
-            // Esfera pequena pra visualizar a luz
-            const sphere = new THREE.Mesh(
-                new THREE.SphereGeometry(0.1, 8, 8),
-                new THREE.MeshBasicMaterial({ color: cor })
-            );
-            sphere.position.copy(light.position);
-            scene.add(sphere);
-        });
-
-        // --- ELEMENTOS 3D ---
-
-        // Grade
-        const grid = new THREE.GridHelper(15, 20, cores[1], 0x333344);
-        grid.position.y = -0.5;
-        scene.add(grid);
-
-        // Partículas (estrelas)
-        const particlesGeo = new THREE.BufferGeometry();
-        const particlesPos = [];
-        for(let i = 0; i < 1000; i++) {
-            const r = 5 + Math.random() * 5;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = (Math.random() - 0.5) * Math.PI;
-            particlesPos.push(
-                Math.cos(theta) * Math.cos(phi) * r,
-                Math.sin(phi) * r,
-                Math.sin(theta) * Math.cos(phi) * r
-            );
-        }
-        particlesGeo.setAttribute('position', new THREE.Float32BufferAttribute(particlesPos, 3));
-        const particlesMat = new THREE.PointsMaterial({ color: 0x8899aa, size: 0.05, transparent: true });
-        const particles = new THREE.Points(particlesGeo, particlesMat);
-        scene.add(particles);
-
-        // Cubos coloridos flutuantes
-        const cubes = [];
-        cores.forEach((cor, i) => {
-            const geo = new THREE.BoxGeometry(0.4, 0.4, 0.4);
-            const mat = new THREE.MeshStandardMaterial({ 
-                color: cor,
-                emissive: cor,
-                emissiveIntensity: 0.3,
-                transparent: true,
-                opacity: 0.8
-            });
-            const cube = new THREE.Mesh(geo, mat);
-            
-            const angle = (i / cores.length) * Math.PI * 2;
-            cube.position.set(
-                Math.cos(angle) * 2.5,
-                Math.sin(i * 2) * 1.2,
-                Math.sin(angle) * 2.5
-            );
-            
-            cube.castShadow = true;
-            scene.add(cube);
-            cubes.push(cube);
-        });
-
-        // Esfera central com wireframe
-        const sphereGeo = new THREE.SphereGeometry(1, 16, 16);
-        const sphereMat = new THREE.MeshStandardMaterial({ 
-            color: 0x1a1a2e, 
-            emissive: 0x223344,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.3
-        });
-        const centerSphere = new THREE.Mesh(sphereGeo, sphereMat);
-        centerSphere.castShadow = true;
-        scene.add(centerSphere);
-
-        // Anéis em volta
-        const ringGeo = new THREE.TorusGeometry(1.3, 0.02, 16, 64);
-        const ringMat = new THREE.MeshStandardMaterial({ color: cores[1], emissive: cores[1], emissiveIntensity: 0.3 });
-        const ring1 = new THREE.Mesh(ringGeo, ringMat);
-        ring1.rotation.x = Math.PI / 2;
-        scene.add(ring1);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         
-        const ring2 = new THREE.Mesh(ringGeo, ringMat);
-        ring2.rotation.z = Math.PI / 2;
-        scene.add(ring2);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Textos flutuantes (usando CSS2D simples)
-        const labels = [];
-        tecnologias.forEach((tech, i) => {
-            const div = document.createElement('div');
-            div.textContent = tech.nome;
-            div.style.color = tech.cor;
-            div.style.fontSize = '20px';
-            div.style.fontWeight = 'bold';
-            div.style.textShadow = `0 0 10px ${tech.cor}`;
-            div.style.background = 'rgba(0,0,0,0.3)';
-            div.style.padding = '4px 12px';
-            div.style.borderRadius = '20px';
-            div.style.backdropFilter = 'blur(5px)';
-            div.style.border = `1px solid ${tech.cor}`;
-            div.style.position = 'absolute';
-            
-            // Não vamos usar CSS2DRenderer pra simplificar, vou criar sprites
-            const canvas = document.createElement('canvas');
-            canvas.width = 128;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = tech.cor;
-            ctx.lineWidth = 2;
-            ctx.strokeRect(1, 1, canvas.width-2, canvas.height-2);
-            ctx.font = 'bold 20px Arial';
-            ctx.fillStyle = tech.cor;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(tech.nome, canvas.width/2, canvas.height/2);
-            
-            const texture = new THREE.CanvasTexture(canvas);
-            const material = new THREE.SpriteMaterial({ map: texture, depthTest: false, depthWrite: false });
-            const sprite = new THREE.Sprite(material);
-            sprite.scale.set(0.8, 0.4, 0.1);
-            
-            const angle = (i / tecnologias.length) * Math.PI * 2;
-            sprite.position.set(
-                Math.cos(angle) * 2,
-                Math.sin(i * 1.5) * 0.8,
-                Math.sin(angle) * 2
+        // Geometria de Partículas baseada na sua Paleta
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
+        const palette = [0xEEC1D8, 0xC6B3FA, 0xB2D5DE, 0xB2DECD, 0xFFF4AC];
+
+        for (let i = 0; i < 2000; i++) {
+            vertices.push(
+                THREE.MathUtils.randFloatSpread(1500), 
+                THREE.MathUtils.randFloatSpread(1500), 
+                THREE.MathUtils.randFloatSpread(1500)
             );
-            
-            scene.add(sprite);
-            labels.push(sprite);
+
+            const color = new THREE.Color(palette[Math.floor(Math.random() * palette.length)]);
+            colors.push(color.r, color.g, color.b);
+        }
+
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+        const material = new THREE.PointsMaterial({ 
+            size: 6, 
+            vertexColors: true, 
+            transparent: true, 
+            opacity: 0.6 
         });
 
-        // --- ANIMAÇÃO ---
-        let clock = new THREE.Clock();
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
 
+        camera.position.z = 500;
+
+        // Interatividade com Mouse
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
+        });
+
+        // Loop de Animação
         function animate() {
             requestAnimationFrame(animate);
-            
-            const delta = clock.getDelta();
-            const time = Date.now() * 0.001;
 
-            // Rotação automática da câmera
-            camera.position.x = Math.sin(time * 0.2) * 8;
-            camera.position.z = Math.cos(time * 0.2) * 8;
-            camera.position.y = 2 + Math.sin(time * 0.3) * 0.5;
-            camera.lookAt(0, 0, 0);
-
-            // Animar cubos
-            cubes.forEach((cube, i) => {
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.02;
-                cube.position.y += Math.sin(time * 2 + i) * 0.002;
-            });
-
-            // Animar anéis
-            ring1.rotation.z += 0.002;
-            ring2.rotation.x += 0.002;
-
-            // Animar partículas
-            particles.rotation.y += 0.0005;
-
-            // Animar luzes
-            pointLights.forEach((light, i) => {
-                const angle = time * 0.5 + (i / pointLights.length) * Math.PI * 2;
-                light.position.x = Math.sin(angle) * 3;
-                light.position.z = Math.cos(angle) * 3;
-                light.position.y = Math.sin(angle * 1.5) * 1.5;
-            });
+            // Rotação constante + movimento suave do mouse
+            points.rotation.y += 0.001;
+            points.rotation.x += (mouseY * 0.0005);
+            points.rotation.y += (mouseX * 0.0005);
 
             renderer.render(scene, camera);
         }
 
-        animate();
-
-        // --- RESIZE ---
+        // Responsividade
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // --- REMOVER LOADING ---
-        setTimeout(() => {
-            document.getElementById('loading').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-            }, 1000);
-        }, 1500);
+        animate();
     </script>
 </body>
 </html>
