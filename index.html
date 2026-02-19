@@ -55,7 +55,6 @@
         h1 { font-size: 3rem; margin-bottom: 10px; color: #444; }
         h2 { border-bottom: 2px solid var(--lilas); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; }
 
-        /* AQUI É O SEU CARD ORIGINAL */
         .glass-card {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(15px);
@@ -65,19 +64,6 @@
             padding: 35px;
             margin-bottom: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        .grid-projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .project-img {
-            width: 100%;
-            height: 150px;
-            border-radius: 15px;
-            margin-bottom: 15px;
         }
 
         .tags-wrapper {
@@ -102,8 +88,15 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .tag-pill:hover { transform: scale(1.05); }
-        .tag-pill img { height: 24px; width: auto; }
+        .tag-pill:hover { 
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .tag-pill img {
+            height: 24px;
+            width: auto;
+        }
 
         .bg-rosa { background-color: var(--rosa); }
         .bg-lilas { background-color: var(--lilas); }
@@ -112,9 +105,22 @@
         .bg-salmao { background-color: var(--salmao); }
         .bg-amarelo { background-color: var(--amarelo); }
 
+        .grid-projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .project-img {
+            width: 100%;
+            height: 150px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
         p { line-height: 1.6; font-size: 1.1rem; }
 
-        /* JOGO */
+        /* --- ESTILOS DO JOGO --- */
         #game-container {
             position: relative;
             width: 100%;
@@ -148,14 +154,19 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 15px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
+        .game-btn:hover { transform: scale(1.05); }
 
         #cat {
             position: absolute;
             bottom: 10px;
-            width: 50px;
+            width: 50px; /* Tamanho do ícone */
             height: 50px;
             transition: left 0.1s ease-out;
+            user-select: none;
             display: none;
             object-fit: contain;
         }
@@ -164,6 +175,7 @@
             position: absolute;
             width: 30px;
             height: 30px;
+            user-select: none;
         }
 
         #score {
@@ -172,6 +184,7 @@
             right: 20px;
             font-weight: bold;
             color: var(--lilas);
+            font-size: 1.1rem;
             z-index: 5;
             background: rgba(255,255,255,0.6);
             padding: 2px 12px;
@@ -186,23 +199,21 @@
     <main>
         <header>
             <h1>Kamila de Souza</h1>
-            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI.</p>
+            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI. Estou construindo minha carreira na área de tecnologia, com foco no desenvolvimento contínuo das minhas habilidades técnicas.</p>
         </header>
 
         <section id="projects">
             <h2>Projetos</h2>
-            <div class="glass-card">
-                <div class="grid-projects">
-                    <div>
-                        <div class="project-img" style="background-color: var(--rosa);"></div>
-                        <h3>Em breve...</h3>
-                        <p>Espaço reservado para seus futuros projetos.</p>
-                    </div>
-                    <div>
-                        <div class="project-img" style="background-color: var(--azul);"></div>
-                        <h3>Portfólio 3D</h3>
-                        <p>Este site interativo criado com Three.js.</p>
-                    </div>
+            <div class="grid-projects">
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--rosa);"></div>
+                    <h3>Em breve...</h3>
+                    <p>Espaço reservado para seus futuros projetos.</p>
+                </div>
+                <div class="glass-card">
+                    <div class="project-img" style="background-color: var(--azul);"></div>
+                    <h3>Portfólio 3D</h3>
+                    <p>Este site interativo criado com Three.js.</p>
                 </div>
             </div>
         </section>
@@ -227,13 +238,16 @@
         <section id="mini-game">
             <h2>👾 Skill Hunt: Catch & Debug</h2>
             <div class="glass-card">
+                <p style="font-size: 0.9rem; margin-top: 0;">Mova o mouse para capturar os ícones e completar sua stack!</p>
                 <div id="game-container">
                     <div id="score">Pontos: 0 | Techs: 0/5</div>
+                    
                     <div id="game-overlay">
                         <h3 id="game-status">Pronta para o Deploy?</h3>
                         <p id="game-message">Capture as 5 tecnologias principais e fuja dos bugs!</p>
                         <button class="game-btn" onclick="startGame()">Começar Jogo</button>
                     </div>
+
                     <img src="https://cdn-icons-png.flaticon.com/512/763/763775.png" id="cat" alt="Kitty Hunter">
                 </div>
             </div>
@@ -254,17 +268,30 @@
 
     <script type="module">
         import * as THREE from 'three';
+
+        // --- CÓDIGO DO THREE.JS (BOLINHAS ORIGINAIS) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const createCircleTexture = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.beginPath(); ctx.arc(32, 32, 30, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff'; ctx.fill();
+            return new THREE.CanvasTexture(canvas);
+        };
 
         const geometry = new THREE.BufferGeometry();
         const count = 1800;
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
         const palette = [0xEEC1D8, 0xC6B3FA, 0xB2D5DE, 0xB2DECD, 0xFFF4AC];
+
         for (let i = 0; i < count * 3; i += 3) {
             positions[i] = (Math.random() - 0.5) * 1200;
             positions[i+1] = (Math.random() - 0.5) * 1200;
@@ -272,102 +299,52 @@
             const color = new THREE.Color(palette[Math.floor(Math.random() * palette.length)]);
             colors[i] = color.r; colors[i+1] = color.g; colors[i+2] = color.b;
         }
+
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const material = new THREE.PointsMaterial({ size: 8, vertexColors: true, transparent: true, opacity: 0.6 });
+
+        const material = new THREE.PointsMaterial({
+            size: 8, map: createCircleTexture(), vertexColors: true,
+            transparent: true, opacity: 0.6, alphaTest: 0.5
+        });
+
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         camera.position.z = 500;
 
         let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.05;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.05;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.02;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.02;
         });
 
         function animate() {
             requestAnimationFrame(animate);
-            points.rotation.y += 0.0004;
-            points.rotation.x += (mouseY * 0.0001);
-            points.rotation.y += (mouseX * 0.0001);
+            points.rotation.y += 0.0004; 
+            points.rotation.x += (mouseY * 0.0002);
+            points.rotation.y += (mouseX * 0.0002);
             renderer.render(scene, camera);
         }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
         animate();
 
-        // JOGO
+        // --- LÓGICA DO JOGUINHO ---
         const gameContainer = document.getElementById('game-container');
         const cat = document.getElementById('cat');
         const scoreElement = document.getElementById('score');
         const overlay = document.getElementById('game-overlay');
-        let score = 0, gameActive = false, collectedTechs = new Set(), spawnInterval;
-        const techIcons = [
-            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
-            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
-            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
-            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
-            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'
-        ];
+        const statusText = document.getElementById('game-status');
+        const messageText = document.getElementById('game-message');
+        
+        let score = 0;
+        let gameActive = false;
+        let collectedTechs = new Set();
+        let spawnInterval;
 
-        window.startGame = function() {
-            score = 0; collectedTechs.clear(); gameActive = true;
-            scoreElement.innerText = `Pontos: 0 | Techs: 0/5`;
-            overlay.style.display = 'none'; cat.style.display = 'block';
-            gameContainer.style.cursor = 'none';
-            spawnInterval = setInterval(createFallingObject, 1000);
-        };
-
-        gameContainer.addEventListener('mousemove', (e) => {
-            if (!gameActive) return;
-            const rect = gameContainer.getBoundingClientRect();
-            let x = e.clientX - rect.left - 25;
-            if (x < 0) x = 0;
-            if (x > rect.width - 50) x = rect.width - 50;
-            cat.style.left = x + 'px';
-        });
-
-        function createFallingObject() {
-            if (!gameActive) return;
-            const isBug = Math.random() < 0.25;
-            const element = isBug ? document.createElement('div') : document.createElement('img');
-            if (isBug) { element.innerText = '👾'; element.style.fontSize = '25px'; element.dataset.type = 'bug'; }
-            else { 
-                const idx = Math.floor(Math.random() * techIcons.length);
-                element.src = techIcons[idx]; element.dataset.type = 'tech'; element.dataset.index = idx;
-            }
-            element.classList.add('falling-icon');
-            element.style.left = Math.random() * (gameContainer.offsetWidth - 30) + 'px';
-            element.style.top = '-40px';
-            element.style.position = 'absolute';
-            gameContainer.appendChild(element);
-            let topPos = -40;
-            const fall = setInterval(() => {
-                if (!gameActive) { element.remove(); clearInterval(fall); return; }
-                topPos += 3.5;
-                element.style.top = topPos + 'px';
-                const catRect = cat.getBoundingClientRect();
-                const objRect = element.getBoundingClientRect();
-                if (objRect.bottom >= catRect.top && objRect.right >= catRect.left && objRect.left <= catRect.right) {
-                    if (element.dataset.type === 'bug') endGame(false);
-                    else {
-                        score++;
-                        collectedTechs.add(element.dataset.index);
-                        scoreElement.innerText = `Pontos: ${score} | Techs: ${collectedTechs.size}/5`;
-                        if (collectedTechs.size === 5) endGame(true);
-                    }
-                    element.remove(); clearInterval(fall);
-                }
-                if (topPos > gameContainer.offsetHeight) { element.remove(); clearInterval(fall); }
-            }, 20);
-        }
-
-        function endGame(win) {
-            gameActive = false; clearInterval(spawnInterval);
-            cat.style.display = 'none'; gameContainer.style.cursor = 'default';
-            overlay.style.display = 'flex';
-            document.getElementById('game-status').innerText = win ? "🏆 Você Venceu!" : "👾 Game Over!";
-            document.getElementById('game-message').innerText = win ? "Parabéns, código limpo!" : "Um bug quebrou o sistema.";
-            if (win) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        }
-    </script>
-</body>
-</html>
+        const tech
