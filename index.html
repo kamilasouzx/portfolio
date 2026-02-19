@@ -134,7 +134,7 @@
         #game-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(8px);
             z-index: 10;
             display: flex;
@@ -142,7 +142,6 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 20px;
         }
 
         .game-btn {
@@ -155,20 +154,17 @@
             cursor: pointer;
             margin-top: 15px;
             transition: transform 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .game-btn:hover { transform: scale(1.05); }
+        .game-btn:hover { transform: scale(1.1); }
 
         #cat {
             position: absolute;
             bottom: 10px;
-            width: 50px; /* Tamanho do ícone */
-            height: 50px;
+            font-size: 40px;
             transition: left 0.1s ease-out;
             user-select: none;
             display: none;
-            object-fit: contain;
         }
 
         .falling-icon {
@@ -184,11 +180,8 @@
             right: 20px;
             font-weight: bold;
             color: var(--lilas);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             z-index: 5;
-            background: rgba(255,255,255,0.6);
-            padding: 2px 12px;
-            border-radius: 20px;
         }
     </style>
 </head>
@@ -236,19 +229,19 @@
         </section>
 
         <section id="mini-game">
-            <h2>👾 Skill Hunt: Catch & Debug</h2>
+            <h2>Área de Lazer: Catch the Tech!</h2>
             <div class="glass-card">
-                <p style="font-size: 0.9rem; margin-top: 0;">Mova o mouse para capturar os ícones e completar sua stack!</p>
+                <p style="font-size: 0.9rem; margin-top: 0;">Mova o mouse dentro do quadro para o gatinho pegar as tecnologias!</p>
                 <div id="game-container">
                     <div id="score">Pontos: 0 | Techs: 0/5</div>
                     
                     <div id="game-overlay">
-                        <h3 id="game-status">Pronta para o Deploy?</h3>
-                        <p id="game-message">Capture as 5 tecnologias principais e fuja dos bugs!</p>
+                        <h3 id="game-status">Catch the Tech!</h3>
+                        <p id="game-message">Colete as 5 tecnologias e fuja dos bugs!</p>
                         <button class="game-btn" onclick="startGame()">Começar Jogo</button>
                     </div>
 
-                    <img src="https://cdn-icons-png.flaticon.com/512/763/763775.png" id="cat" alt="Kitty Hunter">
+                    <div id="cat">🐱</div>
                 </div>
             </div>
         </section>
@@ -334,7 +327,7 @@
 
         animate();
 
-        // --- LÓGICA DO JOGUINHO ---
+        // --- LÓGICA DO JOGUINHO (ATUALIZADA) ---
         const gameContainer = document.getElementById('game-container');
         const cat = document.getElementById('cat');
         const scoreElement = document.getElementById('score');
@@ -347,4 +340,110 @@
         let collectedTechs = new Set();
         let spawnInterval;
 
-        const tech
+        const techIcons = [
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'
+        ];
+
+        window.startGame = function() {
+            score = 0;
+            collectedTechs.clear();
+            gameActive = true;
+            scoreElement.innerText = `Pontos: 0 | Techs: 0/5`;
+            overlay.style.display = 'none';
+            cat.style.display = 'block';
+            gameContainer.style.cursor = 'none';
+            
+            if(spawnInterval) clearInterval(spawnInterval);
+            spawnInterval = setInterval(createFallingObject, 1000);
+        };
+
+        gameContainer.addEventListener('mousemove', (e) => {
+            if (!gameActive) return;
+            const rect = gameContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left - 20;
+            if (x < 0) x = 0;
+            if (x > rect.width - 40) x = rect.width - 40;
+            cat.style.left = x + 'px';
+        });
+
+        function createFallingObject() {
+            if (!gameActive) return;
+
+            const isBug = Math.random() < 0.25; 
+            const element = isBug ? document.createElement('div') : document.createElement('img');
+            
+            if (isBug) {
+                element.innerText = '👾';
+                element.style.fontSize = '25px';
+                element.style.position = 'absolute';
+                element.dataset.type = 'bug';
+            } else {
+                const idx = Math.floor(Math.random() * techIcons.length);
+                element.src = techIcons[idx];
+                element.dataset.type = 'tech';
+                element.dataset.index = idx;
+            }
+
+            element.classList.add('falling-icon');
+            element.style.left = Math.random() * (gameContainer.offsetWidth - 30) + 'px';
+            element.style.top = '-30px';
+            element.style.position = 'absolute';
+            gameContainer.appendChild(element);
+
+            let topPos = -30;
+            const fall = setInterval(() => {
+                if (!gameActive) {
+                    element.remove();
+                    clearInterval(fall);
+                    return;
+                }
+
+                topPos += 3.5;
+                element.style.top = topPos + 'px';
+
+                const catRect = cat.getBoundingClientRect();
+                const objRect = element.getBoundingClientRect();
+
+                if (objRect.bottom >= catRect.top && objRect.right >= catRect.left && objRect.left <= catRect.right) {
+                    if (element.dataset.type === 'bug') {
+                        endGame(false);
+                    } else {
+                        score++;
+                        collectedTechs.add(element.dataset.index);
+                        scoreElement.innerText = `Pontos: ${score} | Techs: ${collectedTechs.size}/5`;
+                        if (collectedTechs.size === 5) endGame(true);
+                    }
+                    element.remove();
+                    clearInterval(fall);
+                }
+
+                if (topPos > gameContainer.offsetHeight) {
+                    element.remove();
+                    clearInterval(fall);
+                }
+            }, 20);
+        }
+
+        function endGame(isWin) {
+            gameActive = false;
+            clearInterval(spawnInterval);
+            gameContainer.style.cursor = 'default';
+            cat.style.display = 'none';
+            overlay.style.display = 'flex';
+
+            if (isWin) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                statusText.innerText = "🏆 Você Venceu!";
+                messageText.innerText = "Parabéns, você coletou todas as tecnologias!";
+            } else {
+                statusText.innerText = "👾 Game Over!";
+                messageText.innerText = "Um bug quebrou seu sistema. Tente novamente!";
+            }
+        }
+    </script>
+</body>
+</html>
