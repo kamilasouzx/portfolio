@@ -454,13 +454,17 @@
                 statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/9512/9512451.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Você Venceu!';
                 
                 messageText.innerText = "Parabéns, você coletou todas as tecnologias!";
-            } else {
-                statusText.innerText = "👾 Game Over!";
+            else {
+                // Gatinho Triste
+                gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763693.png";
+                
+                // Ícone de Aviso/Erro no PC (o que você escolheu)
+                statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/2050/2050129.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Game Over!';
+                
                 messageText.innerText = "Um bug quebrou seu sistema. Tente novamente!";
-                // Garante que o gatinho volte ao normal se ele tiver ganhado a partida anterior
-                gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763724.png";
             }
         }
+
     </script>
 </body>
 </html>
