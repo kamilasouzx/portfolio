@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Tech</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Teleram, 'Helvetica Neue', sans-serif;
+            color: white;
+        }
+        
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+            pointer-events: none;
+        }
+        
+        #menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 20;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .menu-item:hover {
+            background: #C6B3FA;
+            color: black;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(198, 179, 250, 0.4);
+        }
+        
+        .panel {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            transition: transform 0.5s, opacity 0.5s;
+        }
+        
+        .panel.hidden {
+            transform: translateX(-50%) translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .projects-section, .tech-section {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            background: linear-gradient(90deg, #EEC1D8, #C6B3FA, #B2D5DE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .project-card {
+            background: rgba(30, 30, 40, 0.6);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: #C6B3FA;
+            box-shadow: 0 10px 20px rgba(198, 179, 250, 0.3);
+        }
+        
+        .project-image {
+            height: 140px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7));
+        }
+        
+        .project-info {
+            padding: 15px;
+        }
+        
+        .project-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #FFF4AC;
+        }
+        
+        .project-desc {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .tech-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .tech-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .tech-item:hover {
+            border-color: #B2DECD;
+            transform: scale(1.1) rotate(5deg);
+            background: rgba(178, 222, 205, 0.2);
+        }
+        
+        .tech-icon {
+            font-size: 30px;
+        }
+        
+        .tech-name {
+            font-size: 10px;
+            margin-top: 5px;
+            color: #F1C6A4;
+        }
+        
+        .toggle-panel {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 40;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 30px;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .toggle-panel:hover {
+            background: #B2D5DE;
+            color: black;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a14;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: #C6B3FA;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="loader"></div>
+    </div>
+    
+    <div id="info">
+        <span style="color: #EEC1D8;">✦</span> PORTFOLIO 2025 <span style="color: #B2D5DE;">✦</span>
+    </div>
+    
+    <div id="menu">
+        <a class="menu-item" onclick="filterProjects('all')">Todos</a>
+        <a class="menu-item" onclick="filterProjects('web')">Web</a>
+        <a class="menu-item" onclick="filterProjects('3d')">3D</a>
+        <a class="menu-item" onclick="filterProjects('app')">Apps</a>
+    </div>
+    
+    <div class="panel" id="mainPanel">
+        <div class="projects-section">
+            <h2>📁 PROJETOS</h2>
+            <div class="project-grid" id="projectGrid">
+                <!-- Projects will be inserted via JS -->
+            </div>
+        </div>
+        
+        <div class="tech-section">
+            <h2>⚙️ TECNOLOGIAS</h2>
+            <div class="tech-icons" id="techIcons">
+                <!-- Tech icons will be inserted via JS -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="toggle-panel" id="togglePanel">▲ FECHAR PAINEL ▲</div>
+
+    <!-- Import Three.js and libraries -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>
