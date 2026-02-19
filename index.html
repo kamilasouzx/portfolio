@@ -74,29 +74,14 @@
         }
 
         .tag-pill {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #444;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+            border-radius: 50px; font-size: 0.95rem; font-weight: 600; color: #444;
+            text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s; border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .tag-pill:hover { 
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        }
-
-        .tag-pill img {
-            height: 24px;
-            width: auto;
-        }
+        .tag-pill:hover { transform: scale(1.05); }
+        .tag-pill img { height: 24px; width: auto; }
 
         .bg-rosa { background-color: var(--rosa); }
         .bg-lilas { background-color: var(--lilas); }
@@ -106,55 +91,64 @@
         .bg-amarelo { background-color: var(--amarelo); }
 
         .grid-projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
         }
 
-        .project-img {
-            width: 100%;
-            height: 150px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-
-        p { line-height: 1.6; font-size: 1.1rem; }
+        .project-img { width: 100%; height: 150px; border-radius: 15px; margin-bottom: 15px; }
 
         /* --- ESTILOS DO JOGO --- */
         #game-container {
             position: relative;
             width: 100%;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+            height: 350px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             overflow: hidden;
-            border: 2px dashed var(--lilas);
-            cursor: none;
+            border: 2px solid var(--lilas);
         }
+
+        #game-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .game-btn {
+            background: var(--lilas);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(198, 179, 250, 0.4);
+            transition: 0.3s;
+        }
+
+        .game-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(198, 179, 250, 0.6); }
 
         #cat {
-            position: absolute;
-            bottom: 10px;
-            font-size: 40px;
-            transition: left 0.1s ease-out;
-            user-select: none;
+            position: absolute; bottom: 10px; font-size: 40px;
+            left: 50%; transform: translateX(-50%);
+            transition: left 0.1s ease-out; user-select: none;
+            display: none; /* Só aparece quando o jogo começa */
         }
 
-        .falling-icon {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            user-select: none;
-        }
+        .falling-icon { position: absolute; width: 32px; height: 32px; user-select: none; }
 
         #score {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-weight: bold;
-            color: var(--lilas);
-            font-size: 1.2rem;
-            text-align: right;
+            position: absolute; top: 15px; right: 20px;
+            font-weight: 800; color: var(--texto); font-size: 1rem;
+            background: rgba(255,255,255,0.5); padding: 5px 15px; border-radius: 20px;
         }
     </style>
 </head>
@@ -165,24 +159,8 @@
     <main>
         <header>
             <h1>Kamila de Souza</h1>
-            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI. Estou construindo minha carreira na área de tecnologia, com foco no desenvolvimento contínuo das minhas habilidades técnicas.</p>
+            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI.</p>
         </header>
-
-        <section id="projects">
-            <h2>Projetos</h2>
-            <div class="grid-projects">
-                <div class="glass-card">
-                    <div class="project-img" style="background-color: var(--rosa);"></div>
-                    <h3>Em breve...</h3>
-                    <p>Espaço reservado para seus futuros projetos.</p>
-                </div>
-                <div class="glass-card">
-                    <div class="project-img" style="background-color: var(--azul);"></div>
-                    <h3>Portfólio 3D</h3>
-                    <p>Este site interativo criado com Three.js.</p>
-                </div>
-            </div>
-        </section>
 
         <section id="tools">
             <h2>Tecnologias & Ferramentas</h2>
@@ -192,61 +170,46 @@
                 <div class="tag-pill bg-amarelo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"> JavaScript</div>
                 <div class="tag-pill bg-salmao"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"> HTML5</div>
                 <div class="tag-pill bg-azul"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"> CSS3</div>
-                <div class="tag-pill bg-amarelo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"> Tailwind</div>
-                <div class="tag-pill bg-azul"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"> PostgreSQL</div>
-                <div class="tag-pill bg-verde"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"> MySQL</div>
-                <div class="tag-pill bg-lilas"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg"> Bootstrap</div>
-                <div class="tag-pill bg-rosa"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/intellij/intellij-original.svg"> IntelliJ</div>
-                <div class="tag-pill bg-azul"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"> VS Code</div>
             </div>
         </section>
 
         <section id="mini-game">
             <h2>Área de Lazer: Catch the Tech!</h2>
             <div class="glass-card">
-                <p style="font-size: 0.9rem; margin-top: 0;">Pegue todas as tecnologias e fuja dos 👾 bugs!</p>
                 <div id="game-container">
                     <div id="score">Pontos: 0 | Techs: 0/5</div>
+                    
+                    <div id="game-overlay">
+                        <h3 id="overlay-title">Catch the Tech!</h3>
+                        <p id="overlay-desc">Colete as 5 tecnologias e evite os bugs 👾</p>
+                        <button class="game-btn" id="start-btn">Iniciar Jogo</button>
+                    </div>
+
                     <div id="cat">🐱</div>
                 </div>
             </div>
         </section>
 
-        <section id="contact">
-            <h2>Entre em contato</h2>
-            <div class="tags-wrapper">
-                <a href="https://www.linkedin.com/in/kamila-de-souza" target="_blank" class="tag-pill bg-azul">
-                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"> LinkedIn
-                </a>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kskamila39@gmail.com" target="_blank" class="tag-pill bg-salmao">
-                    <img src="https://www.vectorlogo.zone/logos/gmail/gmail-icon.svg"> Gmail
-                </a>
-            </div>
-        </section>
-    </main>
+        </main>
 
     <script type="module">
         import * as THREE from 'three';
 
-        // --- CÓDIGO DO THREE.JS (BOLINHAS DE FUNDO) ---
+        // --- CÓDIGO DO THREE.JS (MANTIDO) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
         const createCircleTexture = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64; canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            ctx.beginPath(); ctx.arc(32, 32, 30, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff'; ctx.fill();
-            return new THREE.CanvasTexture(canvas);
+            const canvas = document.createElement('canvas'); canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d'); ctx.beginPath(); ctx.arc(32, 32, 30, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff'; ctx.fill(); return new THREE.CanvasTexture(canvas);
         };
 
         const geometry = new THREE.BufferGeometry();
-        const count = 1800;
+        const count = 1000;
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
         const palette = [0xEEC1D8, 0xC6B3FA, 0xB2D5DE, 0xB2DECD, 0xFFF4AC];
@@ -258,49 +221,33 @@
             const color = new THREE.Color(palette[Math.floor(Math.random() * palette.length)]);
             colors[i] = color.r; colors[i+1] = color.g; colors[i+2] = color.b;
         }
-
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: 8, map: createCircleTexture(), vertexColors: true,
-            transparent: true, opacity: 0.6, alphaTest: 0.5
-        });
-
+        const material = new THREE.PointsMaterial({ size: 8, map: createCircleTexture(), vertexColors: true, transparent: true, opacity: 0.6, alphaTest: 0.5 });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         camera.position.z = 500;
 
-        let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.02;
-            mouseY = (event.clientY - window.innerHeight / 2) * 0.02;
-        });
-
         function animate() {
             requestAnimationFrame(animate);
-            points.rotation.y += 0.0004; 
-            points.rotation.x += (mouseY * 0.0002);
-            points.rotation.y += (mouseX * 0.0002);
+            points.rotation.y += 0.0005;
             renderer.render(scene, camera);
         }
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
         animate();
 
-        // --- LÓGICA DO JOGUINHO ATUALIZADA ---
+        // --- LÓGICA DO JOGUINHO (REFEITA) ---
         const gameContainer = document.getElementById('game-container');
         const cat = document.getElementById('cat');
         const scoreElement = document.getElementById('score');
+        const overlay = document.getElementById('game-overlay');
+        const startBtn = document.getElementById('start-btn');
+        const overlayTitle = document.getElementById('overlay-title');
+        const overlayDesc = document.getElementById('overlay-desc');
         
         let score = 0;
-        let gameActive = true;
-        let collectedTechs = new Set(); 
+        let gameActive = false;
+        let collectedTechs = new Set();
+        let spawnInterval;
 
         const techIcons = [
             'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
@@ -310,7 +257,21 @@
             'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'
         ];
 
-        // Mover o gato
+        function startGame() {
+            score = 0;
+            collectedTechs.clear();
+            gameActive = true;
+            scoreElement.innerText = `Pontos: 0 | Techs: 0/5`;
+            overlay.style.display = 'none';
+            cat.style.display = 'block';
+            gameContainer.style.cursor = 'none';
+            
+            if(spawnInterval) clearInterval(spawnInterval);
+            spawnInterval = setInterval(createFallingObject, 1000);
+        }
+
+        startBtn.addEventListener('click', startGame);
+
         gameContainer.addEventListener('mousemove', (e) => {
             if (!gameActive) return;
             const rect = gameContainer.getBoundingClientRect();
@@ -323,92 +284,77 @@
         function createFallingObject() {
             if (!gameActive) return;
 
-            const isBug = Math.random() < 0.25; // 25% chance de bug
+            const isBug = Math.random() < 0.3; 
             const element = isBug ? document.createElement('div') : document.createElement('img');
             
             if (isBug) {
                 element.innerText = '👾';
                 element.style.fontSize = '25px';
-                element.style.position = 'absolute';
                 element.dataset.type = 'bug';
             } else {
-                const randomIdx = Math.floor(Math.random() * techIcons.length);
-                element.src = techIcons[randomIdx];
-                element.classList.add('falling-icon');
+                const idx = Math.floor(Math.random() * techIcons.length);
+                element.src = techIcons[idx];
                 element.dataset.type = 'tech';
-                element.dataset.index = randomIdx;
+                element.dataset.index = idx;
             }
 
+            element.className = 'falling-icon';
             element.style.left = Math.random() * (gameContainer.offsetWidth - 30) + 'px';
-            element.style.top = '-30px';
-            element.style.position = 'absolute';
+            element.style.top = '-40px';
             gameContainer.appendChild(element);
 
-            let topPos = -30;
-            const fallInterval = setInterval(() => {
+            let topPos = -40;
+            const fall = setInterval(() => {
                 if (!gameActive) {
                     element.remove();
-                    clearInterval(fallInterval);
+                    clearInterval(fall);
                     return;
                 }
 
-                topPos += 3.5;
+                topPos += 4;
                 element.style.top = topPos + 'px';
 
                 const catRect = cat.getBoundingClientRect();
                 const objRect = element.getBoundingClientRect();
 
-                // Colisão
-                if (
-                    objRect.bottom >= catRect.top &&
-                    objRect.right >= catRect.left &&
-                    objRect.left <= catRect.right
-                ) {
+                if (objRect.bottom >= catRect.top && objRect.right >= catRect.left && objRect.left <= catRect.right) {
                     if (element.dataset.type === 'bug') {
                         endGame(false);
                     } else {
                         score++;
                         collectedTechs.add(element.dataset.index);
                         scoreElement.innerText = `Pontos: ${score} | Techs: ${collectedTechs.size}/5`;
-                        
-                        if (collectedTechs.size === 5) {
-                            endGame(true);
-                        }
+                        if (collectedTechs.size === 5) endGame(true);
                     }
                     element.remove();
-                    clearInterval(fallInterval);
+                    clearInterval(fall);
                 }
 
                 if (topPos > gameContainer.offsetHeight) {
                     element.remove();
-                    clearInterval(fallInterval);
+                    clearInterval(fall);
                 }
             }, 20);
         }
 
-        function endGame(win) {
+        function endGame(isWin) {
             gameActive = false;
-            if (win) {
+            clearInterval(spawnInterval);
+            gameContainer.style.cursor = 'default';
+            cat.style.display = 'none';
+            
+            overlay.style.display = 'flex';
+            startBtn.innerText = "Jogar Novamente";
+
+            if (isWin) {
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                setTimeout(() => {
-                    if (confirm("🏆 Você ganhou! Coletou todas as tecnologias. Deseja jogar novamente?")) resetGame();
-                }, 500);
+                overlayTitle.innerText = "🏆 Você Venceu!";
+                overlayDesc.innerText = "Código limpo e tecnologias dominadas!";
             } else {
-                setTimeout(() => {
-                    if (confirm("👾 Ops, um bug! Você perdeu. Deseja tentar novamente?")) resetGame();
-                }, 100);
+                overlayTitle.innerText = "👾 Game Over!";
+                overlayDesc.innerText = "O bug quebrou o sistema! Tente de novo.";
             }
         }
-
-        function resetGame() {
-            score = 0;
-            collectedTechs.clear();
-            scoreElement.innerText = `Pontos: 0 | Techs: 0/5`;
-            gameActive = true;
-        }
-
-        setInterval(createFallingObject, 1000);
-
     </script>
 </body>
 </html>
