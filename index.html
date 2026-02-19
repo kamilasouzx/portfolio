@@ -239,9 +239,10 @@
                     <div id="score">Pontos: 0 | Techs: 0/5</div>
                     
                    <div id="game-overlay">
-    <img src="https://cdn-icons-png.flaticon.com/512/763/763724.png" alt="Gatinho" style="width: 80px; height: 80px; margin-bottom: 15px;">
+    <img id="game-icon" src="https://cdn-icons-png.flaticon.com/512/763/763724.png" alt="Gatinho" style="width: 80px; height: 80px; margin-bottom: 15px;">
     
-    <h3 id="game-status" style="margin: 0;"></h3> <p id="game-message">Colete as 5 tecnologias e fuja dos bugs!</p>
+    <h3 id="game-status" style="margin: 0;"></h3> 
+    <p id="game-message">Colete as 5 tecnologias e fuja dos bugs!</p>
     <button class="game-btn" onclick="startGame()">Começar Jogo</button>
 </div>
                     <img id="cat" src="https://cdn-icons-png.flaticon.com/512/763/763704.png" style="width: 50px; height: 50px; display: none;">
@@ -440,16 +441,24 @@
             cat.style.display = 'none';
             overlay.style.display = 'flex';
 
+            // Pega a referência da imagem do gatinho no menu
+            const gameIcon = document.getElementById('game-icon');
+
             if (isWin) {
-
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-
-                statusText.innerText = "🏆 Você Venceu!";
-
+                
+                // 1. Troca para o gatinho feliz
+                gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763722.png";
+                
+                // 2. Coloca o troféu antes do texto "Você Venceu!"
+                statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/9512/9512451.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Você Venceu!';
+                
                 messageText.innerText = "Parabéns, você coletou todas as tecnologias!";
-    } else {
+            } else {
                 statusText.innerText = "👾 Game Over!";
                 messageText.innerText = "Um bug quebrou seu sistema. Tente novamente!";
+                // Garante que o gatinho volte ao normal se ele tiver ganhado a partida anterior
+                gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763724.png";
             }
         }
     </script>
