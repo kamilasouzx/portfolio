@@ -13,14 +13,14 @@
     </script>
     <style>
         :root {
-            --bg-base: #050505; /* Um preto levemente mais profundo */
+            --bg-base: #f4f4f4;
             --rosa: #EEC1D8;
             --lilas: #C6B3FA;
             --salmao: #F1C6A4;
             --azul: #B2D5DE;
             --verde: #B2DECD;
             --amarelo: #FFF4AC;
-            --texto: #f4f4f4;
+            --texto: #444;
         }
 
         body {
@@ -36,8 +36,6 @@
             top: 0;
             left: 0;
             z-index: -1;
-            /* Filtro para dar um brilho extra nas partículas */
-            filter: saturate(1.5) contrast(1.1);
         }
 
         main {
@@ -53,23 +51,18 @@
             padding: 40px 0;
         }
 
-        h1 { 
-            font-size: 3.5rem; 
-            margin-bottom: 10px; 
-            color: #fff;
-            text-shadow: 0 0 20px rgba(198, 179, 250, 0.3); /* Brilho no nome */
-        }
+        h1 { font-size: 3rem; margin-bottom: 10px; color: #444; }
         h2 { border-bottom: 2px solid var(--lilas); display: inline-block; padding-bottom: 5px; margin-bottom: 25px; }
 
         .glass-card {
-            background: rgba(15, 15, 15, 0.6); /* Preto mais "premium" */
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 25px;
             padding: 35px;
             margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
         .tags-wrapper {
@@ -87,19 +80,22 @@
             border-radius: 50px;
             font-size: 0.95rem;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #444;
             text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .tag-pill:hover { 
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
-        .tag-pill img { height: 24px; width: auto; }
+        .tag-pill img {
+            height: 24px;
+            width: auto;
+        }
 
         .bg-rosa { background-color: var(--rosa); }
         .bg-lilas { background-color: var(--lilas); }
@@ -119,10 +115,9 @@
             height: 150px;
             border-radius: 15px;
             margin-bottom: 15px;
-            opacity: 0.8;
         }
 
-        p { line-height: 1.6; font-size: 1.1rem; color: #ccc; }
+        p { line-height: 1.6; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -139,12 +134,12 @@
             <h2>Projetos</h2>
             <div class="grid-projects">
                 <div class="glass-card">
-                    <div class="project-img" style="background: linear-gradient(45deg, var(--rosa), var(--lilas));"></div>
+                    <div class="project-img" style="background-color: var(--rosa);"></div>
                     <h3>Em breve...</h3>
                     <p>Espaço reservado para seus futuros projetos.</p>
                 </div>
                 <div class="glass-card">
-                    <div class="project-img" style="background: linear-gradient(45deg, var(--azul), var(--verde));"></div>
+                    <div class="project-img" style="background-color: var(--azul);"></div>
                     <h3>Portfólio 3D</h3>
                     <p>Este site interativo criado com Three.js.</p>
                 </div>
@@ -185,83 +180,58 @@
         import * as THREE from 'three';
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1500);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Textura mais suave para as partículas (brilho radial)
         const createCircleTexture = () => {
             const canvas = document.createElement('canvas');
             canvas.width = 64; canvas.height = 64;
             const ctx = canvas.getContext('2d');
-            const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-            gradient.addColorStop(0, 'rgba(255,255,255,1)');
-            gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
-            gradient.addColorStop(0.5, 'rgba(255,255,255,0.2)');
-            gradient.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 64, 64);
+            ctx.beginPath(); ctx.arc(32, 32, 30, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff'; ctx.fill();
             return new THREE.CanvasTexture(canvas);
         };
 
         const geometry = new THREE.BufferGeometry();
-        const count = 2000;
+        const count = 1800;
         const positions = new Float32Array(count * 3);
         const colors = new Float32Array(count * 3);
-        const sizes = new Float32Array(count);
         const palette = [0xEEC1D8, 0xC6B3FA, 0xB2D5DE, 0xB2DECD, 0xFFF4AC];
 
-        for (let i = 0; i < count; i++) {
-            positions[i*3] = (Math.random() - 0.5) * 1400;
-            positions[i*3+1] = (Math.random() - 0.5) * 1400;
-            positions[i*3+2] = (Math.random() - 0.5) * 1400;
-            
+        for (let i = 0; i < count * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 1200;
+            positions[i+1] = (Math.random() - 0.5) * 1200;
+            positions[i+2] = (Math.random() - 0.5) * 1200;
             const color = new THREE.Color(palette[Math.floor(Math.random() * palette.length)]);
-            colors[i*3] = color.r;
-            colors[i*3+1] = color.g;
-            colors[i*3+2] = color.b;
-            sizes[i] = Math.random() * 10 + 5;
+            colors[i] = color.r; colors[i+1] = color.g; colors[i+2] = color.b;
         }
 
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
         const material = new THREE.PointsMaterial({
-            size: 10,
-            map: createCircleTexture(),
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.8,
-            blending: THREE.AdditiveBlending, // Isso faz as cores brilharem quando se sobrepõem
-            depthWrite: false
+            size: 8, map: createCircleTexture(), vertexColors: true,
+            transparent: true, opacity: 0.6, alphaTest: 0.5
         });
 
         const points = new THREE.Points(geometry, material);
         scene.add(points);
-        camera.position.z = 600;
+        camera.position.z = 500;
 
         let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.01;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.01;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.02;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.02;
         });
 
-        function animate(time) {
+        function animate() {
             requestAnimationFrame(animate);
-            
-            // Rotação base constante
-            points.rotation.y += 0.0003;
-            
-            // Reação ao mouse suave
-            points.rotation.x += (mouseY * 0.0005 - points.rotation.x) * 0.05;
-            points.rotation.y += (mouseX * 0.0005 - points.rotation.y) * 0.05;
-            
-            // Efeito de "respiração" nas partículas usando o tempo
-            const s = Math.sin(time * 0.001) * 0.1 + 0.9;
-            points.scale.set(s, s, s);
-
+            points.rotation.y += 0.0004; 
+            points.rotation.x += (mouseY * 0.0002);
+            points.rotation.y += (mouseX * 0.0002);
             renderer.render(scene, camera);
         }
 
@@ -271,7 +241,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        animate(0);
+        animate();
     </script>
 </body>
 </html>
