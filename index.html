@@ -138,10 +138,11 @@
 
         #cat {
             position: absolute; bottom: 10px; 
-            width: 50px; height: 50px; /* Ajuste para a imagem */
+            width: 50px; height: 50px; /* Ajuste para a imagem do gato */
             left: 50%; transform: translateX(-50%);
             transition: left 0.1s ease-out; user-select: none;
             display: none; 
+            object-fit: contain;
         }
 
         .falling-icon { position: absolute; width: 32px; height: 32px; user-select: none; }
@@ -204,12 +205,12 @@
                         <button class="game-btn" id="start-btn">Iniciar Jogo</button>
                     </div>
 
-                    <img src="https://cdn-icons-png.flaticon.com/512/763/763775.png" id="cat" alt="Kitty">
+                    <img src="https://cdn-icons-png.flaticon.com/512/763/763775.png" id="cat" alt="Gatinho">
                 </div>
             </div>
         </section>
 
-        </main>
+    </main>
 
     <script type="module">
         import * as THREE from 'three';
