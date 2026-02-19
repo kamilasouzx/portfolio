@@ -11,6 +11,7 @@
           }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --bg-base: #f4f4f4;
@@ -153,6 +154,7 @@
             font-weight: bold;
             color: var(--lilas);
             font-size: 1.2rem;
+            text-align: right;
         }
     </style>
 </head>
@@ -202,9 +204,9 @@
         <section id="mini-game">
             <h2>Área de Lazer: Catch the Tech!</h2>
             <div class="glass-card">
-                <p style="font-size: 0.9rem; margin-top: 0;">Mova o mouse dentro do quadro para o gatinho pegar as tecnologias!</p>
+                <p style="font-size: 0.9rem; margin-top: 0;">Pegue todas as tecnologias e fuja dos 👾 bugs!</p>
                 <div id="game-container">
-                    <div id="score">Pontos: 0</div>
+                    <div id="score">Pontos: 0 | Techs: 0/5</div>
                     <div id="cat">🐱</div>
                 </div>
             </div>
@@ -226,7 +228,7 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- CÓDIGO DO THREE.JS (BOLINHAS) ---
+        // --- CÓDIGO DO THREE.JS (BOLINHAS DE FUNDO) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -291,11 +293,14 @@
 
         animate();
 
-        // --- LÓGICA DO JOGUINHO ---
+        // --- LÓGICA DO JOGUINHO ATUALIZADA ---
         const gameContainer = document.getElementById('game-container');
         const cat = document.getElementById('cat');
         const scoreElement = document.getElementById('score');
+        
         let score = 0;
+        let gameActive = true;
+        let collectedTechs = new Set(); 
 
         const techIcons = [
             'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
@@ -305,8 +310,9 @@
             'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'
         ];
 
-        // Mover o gato com o mouse dentro do container
+        // Mover o gato
         gameContainer.addEventListener('mousemove', (e) => {
+            if (!gameActive) return;
             const rect = gameContainer.getBoundingClientRect();
             let x = e.clientX - rect.left - 20;
             if (x < 0) x = 0;
@@ -314,45 +320,94 @@
             cat.style.left = x + 'px';
         });
 
-        function createIcon() {
-            const icon = document.createElement('img');
-            const randomTech = techIcons[Math.floor(Math.random() * techIcons.length)];
-            icon.src = randomTech;
-            icon.classList.add('falling-icon');
-            icon.style.left = Math.random() * (gameContainer.offsetWidth - 30) + 'px';
-            icon.style.top = '-30px';
-            gameContainer.appendChild(icon);
+        function createFallingObject() {
+            if (!gameActive) return;
+
+            const isBug = Math.random() < 0.25; // 25% chance de bug
+            const element = isBug ? document.createElement('div') : document.createElement('img');
+            
+            if (isBug) {
+                element.innerText = '👾';
+                element.style.fontSize = '25px';
+                element.style.position = 'absolute';
+                element.dataset.type = 'bug';
+            } else {
+                const randomIdx = Math.floor(Math.random() * techIcons.length);
+                element.src = techIcons[randomIdx];
+                element.classList.add('falling-icon');
+                element.dataset.type = 'tech';
+                element.dataset.index = randomIdx;
+            }
+
+            element.style.left = Math.random() * (gameContainer.offsetWidth - 30) + 'px';
+            element.style.top = '-30px';
+            element.style.position = 'absolute';
+            gameContainer.appendChild(element);
 
             let topPos = -30;
             const fallInterval = setInterval(() => {
-                topPos += 3;
-                icon.style.top = topPos + 'px';
+                if (!gameActive) {
+                    element.remove();
+                    clearInterval(fallInterval);
+                    return;
+                }
 
-                // Checar colisão com o gato
+                topPos += 3.5;
+                element.style.top = topPos + 'px';
+
                 const catRect = cat.getBoundingClientRect();
-                const iconRect = icon.getBoundingClientRect();
+                const objRect = element.getBoundingClientRect();
 
+                // Colisão
                 if (
-                    iconRect.bottom >= catRect.top &&
-                    iconRect.right >= catRect.left &&
-                    iconRect.left <= catRect.right
+                    objRect.bottom >= catRect.top &&
+                    objRect.right >= catRect.left &&
+                    objRect.left <= catRect.right
                 ) {
-                    score++;
-                    scoreElement.innerText = `Pontos: ${score}`;
-                    icon.remove();
+                    if (element.dataset.type === 'bug') {
+                        endGame(false);
+                    } else {
+                        score++;
+                        collectedTechs.add(element.dataset.index);
+                        scoreElement.innerText = `Pontos: ${score} | Techs: ${collectedTechs.size}/5`;
+                        
+                        if (collectedTechs.size === 5) {
+                            endGame(true);
+                        }
+                    }
+                    element.remove();
                     clearInterval(fallInterval);
                 }
 
-                // Remover se sair da tela
                 if (topPos > gameContainer.offsetHeight) {
-                    icon.remove();
+                    element.remove();
                     clearInterval(fallInterval);
                 }
             }, 20);
         }
 
-        // Criar um novo ícone a cada 1.5 segundos
-        setInterval(createIcon, 1500);
+        function endGame(win) {
+            gameActive = false;
+            if (win) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                setTimeout(() => {
+                    if (confirm("🏆 Você ganhou! Coletou todas as tecnologias. Deseja jogar novamente?")) resetGame();
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    if (confirm("👾 Ops, um bug! Você perdeu. Deseja tentar novamente?")) resetGame();
+                }, 100);
+            }
+        }
+
+        function resetGame() {
+            score = 0;
+            collectedTechs.clear();
+            scoreElement.innerText = `Pontos: 0 | Techs: 0/5`;
+            gameActive = true;
+        }
+
+        setInterval(createFallingObject, 1000);
 
     </script>
 </body>
