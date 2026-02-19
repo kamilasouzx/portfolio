@@ -66,6 +66,38 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
+        /* --- ESTILO DOS CARDS DE PROJETOS (RESTAURADO) --- */
+        .grid-projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 150px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* ------------------------------------------- */
+
         .tags-wrapper {
             display: flex;
             flex-wrap: wrap;
@@ -88,15 +120,8 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .tag-pill:hover { 
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        }
-
-        .tag-pill img {
-            height: 24px;
-            width: auto;
-        }
+        .tag-pill:hover { transform: scale(1.05); }
+        .tag-pill img { height: 24px; width: auto; }
 
         .bg-rosa { background-color: var(--rosa); }
         .bg-lilas { background-color: var(--lilas); }
@@ -104,19 +129,6 @@
         .bg-verde { background-color: var(--verde); }
         .bg-salmao { background-color: var(--salmao); }
         .bg-amarelo { background-color: var(--amarelo); }
-
-        .grid-projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .project-img {
-            width: 100%;
-            height: 150px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
 
         p { line-height: 1.6; font-size: 1.1rem; }
 
@@ -154,10 +166,7 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 15px;
-            transition: transform 0.2s;
         }
-
-        .game-btn:hover { transform: scale(1.05); }
 
         #cat {
             position: absolute;
@@ -165,7 +174,6 @@
             width: 50px;
             height: 50px;
             transition: left 0.1s ease-out;
-            user-select: none;
             display: none;
             object-fit: contain;
         }
@@ -174,7 +182,6 @@
             position: absolute;
             width: 30px;
             height: 30px;
-            user-select: none;
         }
 
         #score {
@@ -183,7 +190,6 @@
             right: 20px;
             font-weight: bold;
             color: var(--lilas);
-            font-size: 1.1rem;
             z-index: 5;
             background: rgba(255,255,255,0.6);
             padding: 2px 12px;
@@ -198,18 +204,18 @@
     <main>
         <header>
             <h1>Kamila de Souza</h1>
-            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI. Estou construindo minha carreira na área de tecnologia.</p>
+            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI.</p>
         </header>
 
         <section id="projects">
             <h2>Projetos</h2>
             <div class="grid-projects">
-                <div class="glass-card">
+                <div class="project-card">
                     <div class="project-img" style="background-color: var(--rosa);"></div>
                     <h3>Em breve...</h3>
                     <p>Espaço reservado para seus futuros projetos.</p>
                 </div>
-                <div class="glass-card">
+                <div class="project-card">
                     <div class="project-img" style="background-color: var(--azul);"></div>
                     <h3>Portfólio 3D</h3>
                     <p>Este site interativo criado com Three.js.</p>
@@ -239,13 +245,11 @@
             <div class="glass-card">
                 <div id="game-container">
                     <div id="score">Pontos: 0 | Techs: 0/5</div>
-                    
                     <div id="game-overlay">
                         <h3 id="game-status">Pronta para o Deploy?</h3>
                         <p id="game-message">Capture as 5 tecnologias principais e fuja dos bugs!</p>
                         <button class="game-btn" onclick="startGame()">Começar Jogo</button>
                     </div>
-
                     <img src="https://cdn-icons-png.flaticon.com/512/763/763775.png" id="cat" alt="Kitty Hunter">
                 </div>
             </div>
@@ -267,21 +271,12 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // --- CÓDIGO DO THREE.JS (RESTAURADO E INTERATIVO) ---
+        // --- THREE.JS ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        const createCircleTexture = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64; canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            ctx.beginPath(); ctx.arc(32, 32, 30, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff'; ctx.fill();
-            return new THREE.CanvasTexture(canvas);
-        };
 
         const geometry = new THREE.BufferGeometry();
         const count = 1800;
@@ -299,16 +294,15 @@
 
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const material = new THREE.PointsMaterial({ size: 8, map: createCircleTexture(), vertexColors: true, transparent: true, opacity: 0.6, alphaTest: 0.5 });
+        const material = new THREE.PointsMaterial({ size: 8, vertexColors: true, transparent: true, opacity: 0.6 });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
         camera.position.z = 500;
 
-        // Mouse Interação
         let mouseX = 0, mouseY = 0;
-        document.addEventListener('mousemove', (event) => {
-            mouseX = (event.clientX - window.innerWidth / 2) * 0.05;
-            mouseY = (event.clientY - window.innerHeight / 2) * 0.05;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.05;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.05;
         });
 
         function animate() {
@@ -320,19 +314,13 @@
         }
         animate();
 
-        // --- LÓGICA DO JOGUINHO ---
+        // --- JOGO ---
         const gameContainer = document.getElementById('game-container');
         const cat = document.getElementById('cat');
         const scoreElement = document.getElementById('score');
         const overlay = document.getElementById('game-overlay');
-        const statusText = document.getElementById('game-status');
-        const messageText = document.getElementById('game-message');
         
-        let score = 0;
-        let gameActive = false;
-        let collectedTechs = new Set();
-        let spawnInterval;
-
+        let score = 0, gameActive = false, collectedTechs = new Set(), spawnInterval;
         const techIcons = [
             'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
             'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
@@ -342,14 +330,10 @@
         ];
 
         window.startGame = function() {
-            score = 0;
-            collectedTechs.clear();
-            gameActive = true;
+            score = 0; collectedTechs.clear(); gameActive = true;
             scoreElement.innerText = `Pontos: 0 | Techs: 0/5`;
-            overlay.style.display = 'none';
-            cat.style.display = 'block';
+            overlay.style.display = 'none'; cat.style.display = 'block';
             gameContainer.style.cursor = 'none';
-            if(spawnInterval) clearInterval(spawnInterval);
             spawnInterval = setInterval(createFallingObject, 1000);
         };
 
@@ -400,19 +384,12 @@
         }
 
         function endGame(win) {
-            gameActive = false;
-            clearInterval(spawnInterval);
-            cat.style.display = 'none';
-            gameContainer.style.cursor = 'default';
+            gameActive = false; clearInterval(spawnInterval);
+            cat.style.display = 'none'; gameContainer.style.cursor = 'default';
             overlay.style.display = 'flex';
-            if (win) {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                statusText.innerText = "🏆 Você Venceu!";
-                messageText.innerText = "Parabéns, código limpo!";
-            } else {
-                statusText.innerText = "👾 Game Over!";
-                messageText.innerText = "Um bug quebrou o sistema.";
-            }
+            document.getElementById('game-status').innerText = win ? "🏆 Você Venceu!" : "👾 Game Over!";
+            document.getElementById('game-message').innerText = win ? "Parabéns, código limpo!" : "Um bug quebrou o sistema.";
+            if (win) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
     </script>
 </body>
