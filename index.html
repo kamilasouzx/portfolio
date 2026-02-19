@@ -441,10 +441,16 @@
             overlay.style.display = 'flex';
 
             if (isWin) {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                statusText.innerText = "🏆 Você Venceu!";
-                messageText.innerText = "Parabéns, você coletou todas as tecnologias!";
-            } else {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        
+        // Troca o gatinho principal para o gatinho feliz
+        gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763722.png"; 
+
+        // Define o título com a imagem do troféu e o texto
+        statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/9512/9512451.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Você Venceu!';
+        
+        messageText.innerText = "Parabéns, você coletou todas as tecnologias!";
+    } else {
                 statusText.innerText = "👾 Game Over!";
                 messageText.innerText = "Um bug quebrou seu sistema. Tente novamente!";
             }
