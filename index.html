@@ -435,35 +435,31 @@
         }
 
         function endGame(isWin) {
-            gameActive = false;
-            clearInterval(spawnInterval);
-            gameContainer.style.cursor = 'default';
-            cat.style.display = 'none';
-            overlay.style.display = 'flex';
+    gameActive = false;
+    clearInterval(spawnInterval);
+    gameContainer.style.cursor = 'default';
+    cat.style.display = 'none';
+    
+    const overlay = document.getElementById('game-overlay');
+    const statusText = document.getElementById('game-status');
+    const messageText = document.getElementById('game-message');
+    const gameIcon = document.getElementById('game-icon'); // Certifique-se que essa linha existe!
 
-            // Pega a referência da imagem do gatinho no menu
-            const gameIcon = document.getElementById('game-icon');
+    overlay.style.display = 'flex';
 
-            if (isWin) {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                
-                // 1. Troca para o gatinho feliz
-                gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763722.png";
-                
-                // 2. Coloca o troféu antes do texto "Você Venceu!"
-                statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/9512/9512451.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Você Venceu!';
-                
-                messageText.innerText = "Parabéns, você coletou todas as tecnologias!";
-            else {
-                // Gatinho Triste
-                gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763693.png";
-                
-                // Ícone de Aviso/Erro no PC (o que você escolheu)
-                statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/2050/2050129.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Game Over!';
-                
-                messageText.innerText = "Um bug quebrou seu sistema. Tente novamente!";
-            }
-        }
+    if (isWin) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763722.png";
+        statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/9512/9512451.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Você Venceu!';
+        messageText.innerText = "Parabéns, você coletou todas as tecnologias!";
+    } else {
+        // Gatinho Triste
+        gameIcon.src = "https://cdn-icons-png.flaticon.com/512/763/763693.png";
+        // Ícone de Aviso
+        statusText.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/2050/2050129.png" style="width:30px; vertical-align:middle; margin-right:5px;"> Game Over!';
+        messageText.innerText = "Um bug quebrou seu sistema. Tente novamente!";
+    }
+}
 
     </script>
 </body>
