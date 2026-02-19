@@ -161,10 +161,12 @@
         #cat {
             position: absolute;
             bottom: 10px;
-            font-size: 40px;
+            width: 50px; /* Tamanho da imagem */
+            height: 50px;
             transition: left 0.1s ease-out;
             user-select: none;
             display: none;
+            object-fit: contain; /* Garante que a imagem não amasse */
         }
 
         .falling-icon {
@@ -240,8 +242,7 @@
                         <p id="game-message">Colete as 5 tecnologias e fuja dos bugs!</p>
                         <button class="game-btn" onclick="startGame()">Começar Jogo</button>
                     </div>
-
-                    <div id="cat">🐱</div>
+                    <img id="cat" src="https://cdn-icons-png.flaticon.com/512/763/763724.png" style="width: 50px; height: 50px; display: none;">
                 </div>
             </div>
         </section>
@@ -364,9 +365,11 @@
         gameContainer.addEventListener('mousemove', (e) => {
             if (!gameActive) return;
             const rect = gameContainer.getBoundingClientRect();
-            let x = e.clientX - rect.left - 20;
+            // Ajuste para o mouse ficar bem no meio da imagem
+            let x = e.clientX - rect.left - 25; 
+            
             if (x < 0) x = 0;
-            if (x > rect.width - 40) x = rect.width - 40;
+            if (x > rect.width - 50) x = rect.width - 50;
             cat.style.left = x + 'px';
         });
 
