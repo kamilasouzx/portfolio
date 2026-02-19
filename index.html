@@ -118,6 +118,42 @@
         }
 
         p { line-height: 1.6; font-size: 1.1rem; }
+
+        /* --- ESTILOS DO JOGO --- */
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px dashed var(--lilas);
+            cursor: none;
+        }
+
+        #cat {
+            position: absolute;
+            bottom: 10px;
+            font-size: 40px;
+            transition: left 0.1s ease-out;
+            user-select: none;
+        }
+
+        .falling-icon {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            user-select: none;
+        }
+
+        #score {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-weight: bold;
+            color: var(--lilas);
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -163,6 +199,17 @@
             </div>
         </section>
 
+        <section id="mini-game">
+            <h2>Área de Lazer: Catch the Tech!</h2>
+            <div class="glass-card">
+                <p style="font-size: 0.9rem; margin-top: 0;">Mova o mouse dentro do quadro para o gatinho pegar as tecnologias!</p>
+                <div id="game-container">
+                    <div id="score">Pontos: 0</div>
+                    <div id="cat">🐱</div>
+                </div>
+            </div>
+        </section>
+
         <section id="contact">
             <h2>Entre em contato</h2>
             <div class="tags-wrapper">
@@ -179,6 +226,7 @@
     <script type="module">
         import * as THREE from 'three';
 
+        // --- CÓDIGO DO THREE.JS (BOLINHAS) ---
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -242,6 +290,70 @@
         });
 
         animate();
+
+        // --- LÓGICA DO JOGUINHO ---
+        const gameContainer = document.getElementById('game-container');
+        const cat = document.getElementById('cat');
+        const scoreElement = document.getElementById('score');
+        let score = 0;
+
+        const techIcons = [
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
+            'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg'
+        ];
+
+        // Mover o gato com o mouse dentro do container
+        gameContainer.addEventListener('mousemove', (e) => {
+            const rect = gameContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left - 20;
+            if (x < 0) x = 0;
+            if (x > rect.width - 40) x = rect.width - 40;
+            cat.style.left = x + 'px';
+        });
+
+        function createIcon() {
+            const icon = document.createElement('img');
+            const randomTech = techIcons[Math.floor(Math.random() * techIcons.length)];
+            icon.src = randomTech;
+            icon.classList.add('falling-icon');
+            icon.style.left = Math.random() * (gameContainer.offsetWidth - 30) + 'px';
+            icon.style.top = '-30px';
+            gameContainer.appendChild(icon);
+
+            let topPos = -30;
+            const fallInterval = setInterval(() => {
+                topPos += 3;
+                icon.style.top = topPos + 'px';
+
+                // Checar colisão com o gato
+                const catRect = cat.getBoundingClientRect();
+                const iconRect = icon.getBoundingClientRect();
+
+                if (
+                    iconRect.bottom >= catRect.top &&
+                    iconRect.right >= catRect.left &&
+                    iconRect.left <= catRect.right
+                ) {
+                    score++;
+                    scoreElement.innerText = `Pontos: ${score}`;
+                    icon.remove();
+                    clearInterval(fallInterval);
+                }
+
+                // Remover se sair da tela
+                if (topPos > gameContainer.offsetHeight) {
+                    icon.remove();
+                    clearInterval(fallInterval);
+                }
+            }, 20);
+        }
+
+        // Criar um novo ícone a cada 1.5 segundos
+        setInterval(createIcon, 1500);
+
     </script>
 </body>
 </html>
