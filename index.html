@@ -65,6 +65,9 @@
             padding: 35px;
             margin-bottom: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .tags-wrapper {
@@ -110,16 +113,21 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
+            align-items: stretch;
         }
 
         .project-img {
             width: 100%;
-            height: 300px;
+            height: 200px;
             border-radius: 15px;
             margin-bottom: 15px;
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.3s ease;
+            background-color: #fafaf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .project-img img {
@@ -137,6 +145,20 @@
             transform: scale(1.05);
         }
 
+        .project-title {
+            font-size: 1.3rem;
+            margin: 10px 0 12px;
+            color: #444;
+        }
+
+        .project-description-text {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
         p { line-height: 1.6; font-size: 1.1rem; }
 
         /* --- ESTILOS DO PROJETO EXPANDIDO --- */
@@ -147,7 +169,7 @@
         .project-description h4 {
             margin: 15px 0 8px;
             color: #555;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
@@ -165,14 +187,14 @@
             gap: 6px;
             padding: 5px 12px;
             border-radius: 50px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: #444;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .project-tech-badge img {
-            height: 16px;
+            height: 14px;
             width: auto;
         }
 
@@ -186,7 +208,7 @@
         }
 
         .project-features li {
-            font-size: 0.92rem;
+            font-size: 0.85rem;
             color: #555;
             display: flex;
             align-items: center;
@@ -197,7 +219,7 @@
             content: '✓';
             color: #B2DECD;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .project-links {
@@ -211,9 +233,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 9px 18px;
+            padding: 8px 16px;
             border-radius: 50px;
-            font-size: 0.88rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #444;
             text-decoration: none;
@@ -228,7 +250,7 @@
         }
 
         .project-link-btn img {
-            height: 18px;
+            height: 16px;
             width: auto;
         }
 
@@ -374,24 +396,29 @@
                     <div class="project-img">
                         <img src="https://i.imgur.com/GURLWlf.png" />
                     </div>
-                    <h3>API Gerenciamento de Eventos</h3>
-                    <p>Sistema web de gerenciamento de eventos que permite listar, cadastrar e se inscrever em eventos. A aplicação exibe um evento em destaque e uma grade com todos os eventos disponíveis, com informações de data, local e descrição.</p>
+                    <h3 class="project-title">🗓️ API Gerenciamento de Eventos</h3>
+                    <div class="project-description-text">
+                        Sistema completo para gerenciar eventos com listagem, cadastro e inscrições.
+                    </div>
 
                     <hr class="divider">
 
                     <div class="project-description">
                         <h4>🛠️ Tecnologias</h4>
-                        <div style="margin-bottom: 6px; font-size: 0.85rem; color: #777; font-weight: 600;">Back-end</div>
                         <div class="project-tech-list">
                             <span class="project-tech-badge bg-salmao"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"> Java</span>
                             <span class="project-tech-badge bg-rosa"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg"> Spring Boot</span>
                             <span class="project-tech-badge bg-verde"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"> MySQL</span>
-                            <span class="project-tech-badge bg-amarelo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"> Node.js</span>
-                        </div>
-                        <div style="margin: 10px 0 6px; font-size: 0.85rem; color: #777; font-weight: 600;">Front-end</div>
-                        <div class="project-tech-list">
                             <span class="project-tech-badge bg-amarelo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"> React</span>
                         </div>
+
+                        <h4>⚙️ Funcionalidades</h4>
+                        <ul class="project-features">
+                            <li>Listagem de eventos</li>
+                            <li>Cadastro de eventos</li>
+                            <li>Inscrição em eventos</li>
+                            <li>Sistema de login</li>
+                        </ul>
 
                         <div class="project-links">
                             <a href="https://github.com/kamilasouzx/frontend-eventos" target="_blank" class="project-link-btn bg-lilas">
@@ -404,31 +431,42 @@
                     </div>
                 </div>
 
-                <!-- Card: E-commerce de Joias -->
-<div class="glass-card">
-    <div class="project-img" style="background-color: #fafaf8; display: flex; align-items: center; justify-content: center;">
-        <img src="https://i.imgur.com/xt76QOc.png" style="width: 100%; height: 100%; object-fit: cover;">
-    </div>
-    <h3>E-commerce de Joias</h3>
-    <p>Loja virtual para joias em prata 925 com carrinho de compras e catálogo organizado por categorias.</p>
+                <!-- Card 2: E-commerce de Joias -->
+                <div class="glass-card">
+                    <div class="project-img">
+                        <img src="https://i.imgur.com/xt76QOc.png" style="width: 80%; object-fit: contain;">
+                    </div>
+                    <h3 class="project-title">✨ E-commerce de Joias</h3>
+                    <div class="project-description-text">
+                        Loja virtual para joias em prata 925 com carrinho de compras e catálogo organizado.
+                    </div>
 
-    <hr class="divider">
+                    <hr class="divider">
 
-    <div class="project-description">
-        <h4>🛠️ Tecnologias</h4>
-        <div class="project-tech-list">
-            <span class="project-tech-badge bg-salmao"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"> HTML5</span>
-            <span class="project-tech-badge bg-azul"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"> CSS3</span>
-            <span class="project-tech-badge bg-amarelo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"> JavaScript</span>
-        </div>
+                    <div class="project-description">
+                        <h4>🛠️ Tecnologias</h4>
+                        <div class="project-tech-list">
+                            <span class="project-tech-badge bg-salmao"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"> HTML5</span>
+                            <span class="project-tech-badge bg-azul"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"> CSS3</span>
+                            <span class="project-tech-badge bg-amarelo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"> JavaScript</span>
+                        </div>
 
-        <div class="project-links">
-            <a href="https://github.com/kamilasouzx/projeto-ecommerce-main" target="_blank" class="project-link-btn bg-rosa">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"> Ver no GitHub
-            </a>
-        </div>
-    </div>
-</div>
+                        <h4>⚙️ Funcionalidades</h4>
+                        <ul class="project-features">
+                            <li>Catálogo por categorias</li>
+                            <li>Carrinho de compras</li>
+                            <li>Seleção de quantidade</li>
+                            <li>Envio via WhatsApp</li>
+                        </ul>
+
+                        <div class="project-links">
+                            <a href="https://github.com/kamilasouzx/projeto-ecommerce-main" target="_blank" class="project-link-btn bg-rosa">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"> Ver no GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="tools">
