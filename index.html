@@ -139,6 +139,105 @@
 
         p { line-height: 1.6; font-size: 1.1rem; }
 
+        /* --- ESTILOS DO PROJETO EXPANDIDO --- */
+        .project-description {
+            margin-top: 15px;
+        }
+
+        .project-description h4 {
+            margin: 15px 0 8px;
+            color: #555;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .project-tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .project-tech-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #444;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .project-tech-badge img {
+            height: 16px;
+            width: auto;
+        }
+
+        .project-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .project-features li {
+            font-size: 0.92rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-features li::before {
+            content: '✓';
+            color: #B2DECD;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .project-link-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #444;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.07);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .project-link-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+
+        .project-link-btn img {
+            height: 18px;
+            width: auto;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(0,0,0,0.07);
+            margin: 18px 0;
+        }
+
         /* --- ESTILOS DO JOGO --- */
         #game-container {
             position: relative;
@@ -264,7 +363,7 @@
     <main>
         <header>
             <h1>Kamila de Souza</h1>
-            <p>Oi! Sou estudante de Sistemas de Informação na ESUCRI e formada como Técnica em Desenvolvimento de Sistemas pelo SENAI. Estou construindo minha carreira na área de tecnologia, com foco no desenvolvimento contínuo das minhas habilidades técnicas.</p>
+            <p>Oi! Estou cursando Sistemas de Informação na ESUCRI e também finalizando um curso Técnico em Desenvolvimento de Sistemas pelo SENAI. Estou construindo minha carreira na área de tecnologia, com foco no desenvolvimento contínuo das minhas habilidades técnicas.</p>
         </header>
 
         <section id="projects">
@@ -274,9 +373,48 @@
                     <div class="project-img">
                         <img src="https://i.imgur.com/GURLWlf.png" />
                     </div>
-                    <h3>API Gerenciamento de Eventos</h3>
-                    <p>Espaço reservado para seus futuros projetos.</p>
+                    <h3>🗓️ Gerente de Eventos</h3>
+                    <p>Sistema web de gerenciamento de eventos que permite listar, cadastrar e se inscrever em eventos. A aplicação exibe um evento em destaque e uma grade com todos os eventos disponíveis, com informações de data, local e descrição.</p>
+
+                    <hr class="divider">
+
+                    <div class="project-description">
+                        <h4>🛠️ Tecnologias</h4>
+                        <div style="margin-bottom: 6px; font-size: 0.85rem; color: #777; font-weight: 600;">Back-end</div>
+                        <div class="project-tech-list">
+                            <span class="project-tech-badge bg-salmao"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"> Java</span>
+                            <span class="project-tech-badge bg-rosa"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg"> Spring Boot</span>
+                            <span class="project-tech-badge bg-verde"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"> MySQL</span>
+                            <span class="project-tech-badge bg-amarelo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"> Node.js</span>
+                        </div>
+                        <div style="margin: 10px 0 6px; font-size: 0.85rem; color: #777; font-weight: 600;">Front-end</div>
+                        <div class="project-tech-list">
+                            <span class="project-tech-badge bg-azul"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"> React</span>
+                            <span class="project-tech-badge bg-lilas"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/axios/axios-plain.svg"> Axios</span>
+                            <span class="project-tech-badge bg-rosa">✨ Lucide React</span>
+                        </div>
+
+                        <h4>⚙️ Funcionalidades</h4>
+                        <ul class="project-features">
+                            <li>Listagem de todos os eventos</li>
+                            <li>Evento em destaque (banner principal)</li>
+                            <li>Busca de usuários</li>
+                            <li>Cadastro de eventos</li>
+                            <li>Inscrição em eventos</li>
+                            <li>Login</li>
+                        </ul>
+
+                        <div class="project-links">
+                            <a href="https://github.com/kamilasouzx/frontend-eventos" target="_blank" class="project-link-btn bg-lilas">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"> Front-end
+                            </a>
+                            <a href="https://github.com/kamilasouzx/events-manager" target="_blank" class="project-link-btn bg-verde">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"> Back-end
+                            </a>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="glass-card">
                     <div class="project-img" style="background-color: var(--azul);"></div>
                     <h3>Portfólio 3D</h3>
